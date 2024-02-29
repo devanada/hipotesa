@@ -2,7 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useFormState } from "react-dom";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -12,8 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
 
 import { RegisterSchema, registerSchema } from "@/lib/types/auth";
+import { postRegister } from "@/lib/actions/auth";
+
+const initialState = {
+  message: "",
+};
 
 export default function LoginForm() {
+  const [state, formAction] = useFormState(postRegister, initialState);
+
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -24,22 +33,18 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = async (data: RegisterSchema) => {
-    try {
-      // const response = await register(data);
-
-      toast("Register is successfull");
-    } catch (error) {
-      toast("Failed to register");
+  useEffect(() => {
+    if (state.message.length !== 0) {
+      toast(state.message);
     }
-  };
+  }, [state]);
 
   return (
     <Form {...form}>
       <form
         data-testid="form-login"
-        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 w-full md:w-3/4 lg:w-1/2"
+        action={formAction}
       >
         <CustomFormField control={form.control} name="name" label="Name">
           {(field) => (

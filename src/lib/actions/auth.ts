@@ -1,26 +1,34 @@
 "use server";
+
 import type { User } from "@prisma/client";
 
-import { RegisterSchema } from "@/lib/types/auth";
-import { IResponseSuccess } from "@/lib/types/api";
+import { RegisterSchema, registerSchema } from "@/lib/types/auth";
+import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
 
-export async function postRegister(body: RegisterSchema) {
+export async function postRegister(prevState: any, formData: FormData) {
+  const body = Object.fromEntries(formData.entries());
+
   try {
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
     if (response.ok) {
       return (await response.json()) as IResponseSuccess<User>;
     }
 
-    return Promise.reject(response);
+    return (await response.json()) as IResponseFailed;
   } catch (error) {
-    throw Error("Failed to post login");
+    console.log(error);
+
+    return { message: "Failed" };
   }
 }

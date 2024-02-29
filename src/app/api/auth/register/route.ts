@@ -19,13 +19,15 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      message: "Register is successfull",
+      message: "Register is successfull, please login",
       data: user,
     });
   } catch (error) {
-    return NextResponse.json({
-      message: "Failed to register",
-      reason: (error as Error).message,
-    });
+    return NextResponse.json(
+      {
+        message: `Failed to register: ${(error as Error).message}`,
+      },
+      { status: 500 }
+    );
   }
 }
