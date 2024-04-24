@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { Loader2 } from "lucide-react";
@@ -8,13 +9,16 @@ import { toast } from "sonner";
 import Link from "next/link";
 
 import { CustomFormField } from "@/components/custom-formfield";
-import { Button } from "@/components/ui/button";
+import { ButtonForm } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
 
 import { LoginSchema, loginSchema } from "@/lib/types/auth";
+import { IResponseFailed } from "@/lib/types/api";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -24,16 +28,11 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginSchema) => {
-    try {
-      const response = await signIn("credentials", data);
+    // TODO: Handle redirect here whether there is callbackUrl on query params or not
+    const response = await signIn("credentials", data);
 
-      if (!response?.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      toast("Login berhasil");
-    } catch (error) {
-      toast("Login gagal");
+    if (!response?.ok) {
+      return toast((JSON.parse(response?.error!) as IResponseFailed).message);
     }
   };
 
@@ -75,7 +74,7 @@ export default function LoginForm() {
           )}
         </CustomFormField>
         <div className="flex flex-col mt-20 gap-y-5 relative">
-          <Button
+          <ButtonForm
             data-testid="btn-submit"
             type="submit"
             disabled={form.formState.isSubmitting}
@@ -89,7 +88,7 @@ export default function LoginForm() {
             ) : (
               "Login"
             )}
-          </Button>
+          </ButtonForm>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
@@ -100,7 +99,7 @@ export default function LoginForm() {
               </span>
             </div>
           </div>
-          <Button
+          <ButtonForm
             data-testid="btn-navigate"
             type="button"
             disabled={form.formState.isSubmitting}
@@ -109,7 +108,7 @@ export default function LoginForm() {
             asChild
           >
             <Link href="/register">Register</Link>
-          </Button>
+          </ButtonForm>
         </div>
       </form>
     </Form>

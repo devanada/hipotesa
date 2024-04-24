@@ -4,6 +4,21 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  RETURNED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,84 +29,159 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                  String  @id @default(cuid())
+  user_id             String
+  type                String
+  provider            String
+  provider_account_id String
+  refresh_token       String? @db.Text
+  access_token        String? @db.Text
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String? @db.Text
+  session_state       String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+  @@unique([provider, provider_account_id])
+  @@map("accounts")
 }
 
 model Session {
   id            String   @id @default(cuid())
-  sessionToken  String   @unique
-  userId        String
+  session_token String   @unique
+  user_id       String
   expires       DateTime
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  username      String    @unique
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  posts         Post[]
-  comments      Comment[]
-  accounts      Account[]
-  sessions      Session[]
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  email_verified DateTime?
+  password       String
+  address        String?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  accounts    Account[]
+  sessions    Session[]
+  Cart        Cart[]
+  Transaction Transaction[]
+  Order       Order[]
+
+  @@map("users")
 }
 
 model VerificationToken {
-  identifier    String
-  token         String   @unique
-  expires       DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_token")
 }
 
-model Post {
-  id            String    @id @default(cuid())
-  title         String
-  content       String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  userId        String
-  categoryId    Int
-  user          User      @relation(fields: [userId], references: [id])
-  category      Category? @relation(fields: [categoryId], references: [id])
-  comments      Comment[]
+model Product {
+  id          String   @id @default(cuid())
+  category_id Int
+  name        String
+  description String
+  price       String
+  image       String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  category  Category?   @relation(fields: [category_id], references: [id])
+  CartItem  CartItem[]
+  OrderItem OrderItem[]
+
+  @@map("products")
 }
 
 model Category {
-  id            Int       @id @default(autoincrement())
-  name          String    @unique
-  description   String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  posts         Post[]
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  posts Product[]
+
+  @@map("categories")
 }
 
-model Comment {
-  id            Int       @id @default(autoincrement())
-  content       String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  postId        String
-  userId        String
-  post          Post      @relation(fields: [postId], references: [id])
-  user          User?     @relation(fields: [userId], references: [id])
+model Cart {
+  id         Int      @id @default(autoincrement())
+  user_id    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user        User          @relation(fields: [user_id], references: [id])
+  cartItems   CartItem[]
+  Transaction Transaction[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id         Int    @id @default(autoincrement())
+  cart_id    Int
+  product_id String
+  quantity   Int
+
+  cart    Cart    @relation(fields: [cart_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("cart_item")
+}
+
+model Transaction {
+  id         Int               @id @default(autoincrement())
+  user_id    String
+  cart_id    Int
+  order_id   Int               @unique
+  amount     Float
+  status     TransactionStatus
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+
+  user  User   @relation(fields: [user_id], references: [id])
+  cart  Cart   @relation(fields: [cart_id], references: [id])
+  order Order?
+
+  @@map("transactions")
+}
+
+model Order {
+  id             Int         @id @default(autoincrement())
+  user_id        String
+  transaction_id Int         @unique
+  items          OrderItem[]
+  total          Float
+  status         OrderStatus
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+
+  user        User         @relation(fields: [user_id], references: [id])
+  transaction Transaction? @relation(fields: [transaction_id], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id         Int    @id @default(autoincrement())
+  order_id   Int
+  product_id String
+  quantity   Int
+  price      Float
+
+  order   Order   @relation(fields: [order_id], references: [id])
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("order_item")
 }

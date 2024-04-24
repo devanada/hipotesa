@@ -1,20 +1,20 @@
-import type { Post } from "@prisma/client";
+import type { Product } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 import { prisma } from "@/db";
 
-export async function fetchPosts(): Promise<Post[]> {
-  return await prisma.post.findMany({
+export async function fetchPosts(): Promise<Product[]> {
+  return await prisma.product.findMany({
     orderBy: [
       {
-        updatedAt: "desc",
+        updated_at: "desc",
       },
     ],
   });
 }
 
-export async function fetchPostById(id: string): Promise<Post | null> {
-  const post = await prisma.post.findFirst({
+export async function fetchPostById(id: string): Promise<Product | null> {
+  const post = await prisma.product.findFirst({
     where: {
       id,
     },

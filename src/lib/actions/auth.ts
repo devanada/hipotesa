@@ -1,6 +1,7 @@
 "use server";
 
 import type { User } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 import { RegisterSchema, registerSchema } from "@/lib/types/auth";
 import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
@@ -22,7 +23,7 @@ export async function postRegister(prevState: any, formData: FormData) {
     );
 
     if (response.ok) {
-      return (await response.json()) as IResponseSuccess<User>;
+      redirect("/login");
     }
 
     return (await response.json()) as IResponseFailed;

@@ -1,11 +1,11 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import type { User } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Adapter } from "next-auth/adapters";
 import NextAuth from "next-auth/next";
-import { compare } from "bcrypt";
 
 import { prisma } from "@/db";
-import { login } from "@/db/queries/auth";
+import { IResponseFailed, IResponseSuccess } from "@/lib/types/api";
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -17,11 +17,25 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials, req) {
-        if (!credentials?.email || !credentials.password) {
-          return null;
+        const response = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              accept: "application/json",
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          }
+        );
+
+        if (response.ok) {
+          const { data } = (await response.json()) as IResponseSuccess<User>;
+          return data;
         }
 
-        return await login(credentials);
+        const result = (await response.json()) as IResponseFailed;
+        throw new Error(JSON.stringify(result));
       },
     }),
   ],
@@ -33,15 +47,6 @@ const handler = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async signIn({ account, profile }) {
-      if (
-        account?.provider === "google" &&
-        profile?.email?.endsWith("@alterra.id")
-      ) {
-        return true;
-      }
-      return true;
-    },
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       else if (new URL(url).origin === baseUrl) {

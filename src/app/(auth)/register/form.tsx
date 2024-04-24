@@ -1,15 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 
 import { CustomFormField } from "@/components/custom-formfield";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonForm } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
 
@@ -18,9 +18,12 @@ import { postRegister } from "@/lib/actions/auth";
 
 const initialState = {
   message: "",
+  reason: undefined,
 };
 
 export default function LoginForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [state, formAction] = useFormState(postRegister, initialState);
 
   const form = useForm<RegisterSchema>({
@@ -28,12 +31,13 @@ export default function LoginForm() {
     defaultValues: {
       name: "",
       email: "",
-      username: "",
       password: "",
     },
   });
 
   useEffect(() => {
+    if (!state) return;
+
     if (state.message.length !== 0) {
       toast(state.message);
     }
@@ -45,6 +49,14 @@ export default function LoginForm() {
         data-testid="form-login"
         className="space-y-8 w-full md:w-3/4 lg:w-1/2"
         action={formAction}
+        onSubmit={(e) => {
+          form.trigger();
+          if (form.formState.isValid) {
+            formRef.current?.requestSubmit();
+          } else {
+            e.preventDefault();
+          }
+        }}
       >
         <CustomFormField control={form.control} name="name" label="Name">
           {(field) => (
@@ -54,7 +66,6 @@ export default function LoginForm() {
               placeholder="John Doe"
               disabled={form.formState.isSubmitting}
               aria-disabled={form.formState.isSubmitting}
-              value={field.value as string}
             />
           )}
         </CustomFormField>
@@ -67,23 +78,6 @@ export default function LoginForm() {
               type="email"
               disabled={form.formState.isSubmitting}
               aria-disabled={form.formState.isSubmitting}
-              value={field.value as string}
-            />
-          )}
-        </CustomFormField>
-        <CustomFormField
-          control={form.control}
-          name="username"
-          label="Username"
-        >
-          {(field) => (
-            <Input
-              {...field}
-              data-testid="input-username"
-              placeholder="johndoe"
-              disabled={form.formState.isSubmitting}
-              aria-disabled={form.formState.isSubmitting}
-              value={field.value as string}
             />
           )}
         </CustomFormField>
@@ -100,17 +94,11 @@ export default function LoginForm() {
               type="password"
               disabled={form.formState.isSubmitting}
               aria-disabled={form.formState.isSubmitting}
-              value={field.value as string}
             />
           )}
         </CustomFormField>
         <div className="flex flex-col mt-20 gap-y-5 relative">
-          <Button
-            data-testid="btn-submit"
-            type="submit"
-            disabled={form.formState.isSubmitting}
-            aria-disabled={form.formState.isSubmitting}
-          >
+          <ButtonForm data-testid="btn-submit" type="submit">
             {form.formState.isSubmitting ? (
               <>
                 <Loader2 className="h-4 mr-2 animate-spin w-4" />
@@ -119,7 +107,7 @@ export default function LoginForm() {
             ) : (
               "Register"
             )}
-          </Button>
+          </ButtonForm>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
@@ -130,16 +118,14 @@ export default function LoginForm() {
               </span>
             </div>
           </div>
-          <Button
+          <ButtonForm
             data-testid="btn-navigate"
             type="button"
-            disabled={form.formState.isSubmitting}
-            aria-disabled={form.formState.isSubmitting}
             variant="outline"
             asChild
           >
             <Link href="/login">Login</Link>
-          </Button>
+          </ButtonForm>
         </div>
       </form>
     </Form>
