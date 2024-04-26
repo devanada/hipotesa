@@ -1,43 +1,42 @@
-import type { Product } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+import { CategorySchema, categorySchema } from "@/lib/types/categories";
 import { prisma } from "@/lib/db";
-import { ProductSchema, productSchema } from "@/lib/types/product";
 
 export async function POST(request: Request) {
   try {
-    const fields = (await request.json()) as ProductSchema;
+    const { name } = (await request.json()) as CategorySchema;
 
-    console.log("TEST", await request.json());
-    const validatedFields = productSchema.safeParse({
-      ...fields,
+    const validatedFields = categorySchema.safeParse({
+      name,
     });
 
     if (!validatedFields.success) {
       return NextResponse.json(
         {
-          message: "Add product failed, please check your input again",
+          message: "Add category failed, please check your input again",
           reason: validatedFields.error.flatten().fieldErrors,
         },
         { status: 400 }
       );
     }
 
-    // TODO: Fix product create
-    // const product = await prisma.product.create({
-    //   data: fields,
-    // });
+    const data = await prisma.category.create({
+      data: {
+        name,
+      },
+    });
 
     return NextResponse.json({
-      message: "Successfully added product to database",
-      data: "product",
+      message: "Successfully added category to database",
+      data,
     });
   } catch (error) {
     console.log(error);
 
     return NextResponse.json(
       {
-        message: "Add product failed, please try again later",
+        message: "Add category failed, please try again later",
         reason: (error as Error).message,
       },
       { status: 500 }
@@ -47,16 +46,21 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+    // TODO: Add query params
+    const data = await prisma.category.findMany({
+      cacheStrategy: { ttl: 60 },
+    });
+
     return NextResponse.json({
-      message: "Successfully get products",
-      data: "product",
+      message: "Successfully get categories",
+      data,
     });
   } catch (error) {
     console.log(error);
 
     return NextResponse.json(
       {
-        message: "Get products failed, please try again later",
+        message: "Get categories failed, please try again later",
         reason: (error as Error).message,
       },
       { status: 500 }

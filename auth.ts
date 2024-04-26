@@ -9,7 +9,7 @@ import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
-import { prisma } from "@/db";
+import { prisma } from "@/lib/db";
 import { IResponseFailed, IResponseSuccess } from "@/lib/types/api";
 
 const providers: Provider[] = [

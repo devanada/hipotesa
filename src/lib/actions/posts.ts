@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { prisma } from "@/db";
+import { prisma } from "@/lib/db";
 
 const postSchema = z.object({
   title: z.string().min(3).max(255),

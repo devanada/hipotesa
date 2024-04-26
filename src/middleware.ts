@@ -41,5 +41,3 @@ export const config = {
 //     return NextResponse.redirect(absoluteURL.toString());
 //   }
 // }
-
-export const runtime = "experimental-edge";

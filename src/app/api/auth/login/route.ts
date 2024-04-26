@@ -2,7 +2,7 @@ import type { User } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { compare } from "bcrypt";
 
-import { prisma } from "@/db";
+import { prisma } from "@/lib/db";
 import { LoginSchema, loginSchema } from "@/lib/types/auth";
 
 export async function POST(request: Request) {
