@@ -1,16 +1,25 @@
 import type { Product } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-import { prisma } from "@/lib/db";
 import { ProductSchema, productSchema } from "@/lib/types/product";
+import { prisma } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const fields = (await request.json()) as ProductSchema;
+    const formData = await request.formData();
 
-    console.log("TEST", await request.json());
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const price = formData.get("price") as string;
+    const category_id = formData.get("category_id") as string;
+
     const validatedFields = productSchema.safeParse({
-      ...fields,
+      name,
+      description,
+      price,
+      // TODO: Adjust image field to optional
+      // image: formData.get("image"),
+      category_id: category_id,
     });
 
     if (!validatedFields.success) {
@@ -23,14 +32,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Fix product create
-    // const product = await prisma.product.create({
-    //   data: fields,
-    // });
+    const data = await prisma.product.create({
+      data: {
+        name,
+        description,
+        price,
+        category_id: +category_id!,
+      },
+    });
 
     return NextResponse.json({
       message: "Successfully added product to database",
-      data: "product",
+      data,
     });
   } catch (error) {
     console.log(error);
@@ -47,9 +60,24 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+    // TODO: Add query params
+    const data = await prisma.product.findMany({
+      cacheStrategy: { ttl: 60 },
+    });
+
+    if (data.length === 0) {
+      return NextResponse.json(
+        {
+          message: "Get products failed, data not found",
+          reason: "There is no record on database about products",
+        },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
       message: "Successfully get products",
-      data: "product",
+      data,
     });
   } catch (error) {
     console.log(error);

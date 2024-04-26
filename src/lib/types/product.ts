@@ -16,13 +16,14 @@ export const productSchema = z.object({
   }),
   image: z
     .instanceof(File)
-    .refine((file) => file.name !== "", "Product image is required")
+    .optional()
     .refine(
-      (file) => file.size <= MAX_UPLOAD_SIZE,
+      (file) => !file || file.size <= MAX_UPLOAD_SIZE,
       `Max image size is ${MAX_MB}MB`
     )
     .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+      (file) =>
+        !file || file.type === "" || ACCEPTED_IMAGE_TYPES.includes(file.type),
       "Only .jpg, .jpeg, and .png formats are supported"
     ),
   category_id: z.string().min(1, {
