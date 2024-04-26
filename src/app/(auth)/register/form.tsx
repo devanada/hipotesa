@@ -3,28 +3,23 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { useFormState } from "react-dom";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 
 import { CustomFormField } from "@/components/custom-formfield";
-import { Button, ButtonForm } from "@/components/ui/button";
+import { ButtonForm } from "@/components/ui/button-form";
 import { Input } from "@/components/ui/input";
 import { Form } from "@/components/ui/form";
 
 import { RegisterSchema, registerSchema } from "@/lib/types/auth";
+import { useFormAction } from "@/lib/hooks/useFormAction";
 import { postRegister } from "@/lib/actions/auth";
-
-const initialState = {
-  message: "",
-  reason: undefined,
-};
 
 export default function LoginForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [state, formAction] = useFormState(postRegister, initialState);
+  const [state, formAction] = useFormAction(postRegister);
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -105,7 +100,7 @@ export default function LoginForm() {
                 Please wait
               </>
             ) : (
-              "Register"
+              "Sign up"
             )}
           </ButtonForm>
           <div className="relative">
@@ -124,7 +119,7 @@ export default function LoginForm() {
             variant="outline"
             asChild
           >
-            <Link href="/login">Login</Link>
+            <Link href="/login">Sign in</Link>
           </ButtonForm>
         </div>
       </form>

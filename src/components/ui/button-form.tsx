@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useFormStatus } from "react-dom";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -51,6 +52,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+const ButtonForm = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const { pending } = useFormStatus();
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={props["disabled"] || pending}
+        aria-disabled={props["aria-disabled"] || pending}
+        {...props}
+      />
+    );
+  }
+);
 Button.displayName = "Button";
+ButtonForm.displayName = "Button";
 
-export { Button, buttonVariants };
+export { Button, ButtonForm, buttonVariants };

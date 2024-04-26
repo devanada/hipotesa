@@ -1,5 +1,3 @@
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 import {
@@ -9,20 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { auth, signIn, signOut } from "@/auth";
 
 const Navbar = async () => {
-  const cookieStore = cookies();
-  const sessionID = cookieStore.get("sessionID");
-
-  async function handleLogout() {
-    "use server";
-
-    cookies().delete("sessionID");
-    cookies().delete("userID");
-
-    revalidatePath("/");
-  }
+  const session = await auth();
 
   return (
     <div className="supports-backdrop-blur:bg-background/60 sticky left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
@@ -30,7 +20,7 @@ const Navbar = async () => {
         <div className="mr-4 flex">
           <div className="hidden md:flex">
             <Link className="text-lg font-semibold text-nowrap" href="/">
-              VoiceBox
+              Hipotesa
             </Link>
           </div>
         </div>
@@ -38,28 +28,44 @@ const Navbar = async () => {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarFallback>VB</AvatarFallback>
+                <AvatarImage src={session?.user?.image ?? undefined} />
+                <AvatarFallback>H</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-44" align="end" forceMount>
-              {sessionID && sessionID?.value.length !== 0 ? (
+              {session ? (
                 <>
                   <DropdownMenuItem asChild>
-                    <Link href="/my-favorite">My Favorite</Link>
+                    <Link href="/user">My Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/my-watchlist">Watchlist</Link>
+                    <Link href="/transactions">Transactions</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/user/settings">Settings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <form action={handleLogout}>
-                      <button className="w-full text-left">Logout</button>
+                    <form
+                      action={async () => {
+                        "use server";
+                        await signOut();
+                      }}
+                    >
+                      <button className="w-full text-left">Sign Out</button>
                     </form>
                   </DropdownMenuItem>
                 </>
               ) : (
                 <DropdownMenuItem asChild>
-                  <Link href="/login">Login</Link>
+                  <form
+                    action={async () => {
+                      "use server";
+                      await signIn();
+                    }}
+                  >
+                    <button className="w-full text-left">Sign in</button>
+                  </form>
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
