@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 
-// const protectedRoutes = ["/dashboard", "/user", "/user/settings"];
 const unprotectedRoutes = ["/", "/login", "/register"];
 
 export default auth((req) => {

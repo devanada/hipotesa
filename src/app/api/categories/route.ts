@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 
 import { CategorySchema, categorySchema } from "@/lib/types/categories";
+import { isNoAuth } from "@/lib/functions";
 import { prisma } from "@/lib/db";
+import { auth } from "@/auth";
 
-export async function POST(request: Request) {
+export const POST = auth(async function POST(request) {
   try {
+    if (isNoAuth(request.auth, true))
+      return NextResponse.json(
+        {
+          message: "You need to signin to access this endpoint",
+          reason: "Not authenticated",
+        },
+        { status: 401 }
+      );
+
     const { name } = (await request.json()) as CategorySchema;
 
     const validatedFields = categorySchema.safeParse({
@@ -42,7 +53,7 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+});
 
 export async function GET(request: Request) {
   try {

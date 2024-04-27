@@ -9,8 +9,9 @@ import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
-import { prisma } from "@/lib/db";
 import { IResponseFailed, IResponseSuccess } from "@/lib/types/api";
+import { Roles } from "@/lib/types/user";
+import { prisma } from "@/lib/db";
 
 const providers: Provider[] = [
   Google({ allowDangerousEmailAccountLinking: true }),
@@ -87,12 +88,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth(config);
 
 declare module "next-auth" {
   interface User {
-    role: string;
+    role: Roles;
   }
 }
 
 declare module "@auth/core/adapters" {
   interface AdapterUser {
-    role: string;
+    role: Roles;
   }
 }
