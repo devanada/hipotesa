@@ -42,8 +42,7 @@ model Account {
   scope               String?
   id_token            String? @db.Text
   session_state       String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -60,21 +59,20 @@ model Session {
 }
 
 model User {
-  id              String    @id @default(cuid())
-  name            String
-  email           String    @unique
-  emailVerified   DateTime? @map("email_verified")
-  image           String?
-  role            String    @default("user")
-  address         String?
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
-
-  accounts    Account[]
-  sessions    Session[]
-  Cart        Cart[]
-  Transaction Transaction[]
-  Order       Order[]
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  role          String    @default("user")
+  address       String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  Cart          Cart[]
+  Transaction   Transaction[]
+  Order         Order[]
 
   @@map("users")
 }
@@ -89,18 +87,17 @@ model VerificationToken {
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   category_id Int
   name        String
   description String
   price       String
   image       String?
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-
-  category  Category?   @relation(fields: [category_id], references: [id])
-  CartItem  CartItem[]
-  OrderItem OrderItem[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  category    Category? @relation(fields: [category_id], references: [id])
+  CartItem    CartItem[]
+  OrderItem   OrderItem[]
 
   @@map("products")
 }
@@ -110,7 +107,6 @@ model Category {
   name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
   posts Product[]
 
   @@map("categories")
@@ -118,23 +114,21 @@ model Category {
 
 model Cart {
   id         Int      @id @default(autoincrement())
-  user_id    String
+  user_id    String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  user        User          @relation(fields: [user_id], references: [id])
-  cartItems   CartItem[]
+  user        User    @relation(fields: [user_id], references: [id])
+  cart_items   CartItem[]
   Transaction Transaction[]
 
   @@map("carts")
 }
 
 model CartItem {
-  id         Int    @id @default(autoincrement())
+  id         Int  @id @default(autoincrement())
   cart_id    Int
   product_id String
   quantity   Int
-
   cart    Cart    @relation(fields: [cart_id], references: [id])
   product Product @relation(fields: [product_id], references: [id])
 
@@ -142,47 +136,44 @@ model CartItem {
 }
 
 model Transaction {
-  id         Int               @id @default(autoincrement())
-  user_id    String
-  cart_id    Int
-  order_id   Int               @unique
-  amount     Float
-  status     TransactionStatus
-  created_at DateTime          @default(now())
-  updated_at DateTime          @updatedAt
-
-  user  User   @relation(fields: [user_id], references: [id])
-  cart  Cart   @relation(fields: [cart_id], references: [id])
-  order Order?
+  id          Int       @id @default(autoincrement())
+  user_id     String
+  cart_id     Int
+  order_id    Int       @unique
+  amount      Float
+  status      TransactionStatus
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  user        User      @relation(fields: [user_id], references: [id])
+  cart        Cart      @relation(fields: [cart_id], references: [id])
+  order       Order?
 
   @@map("transactions")
 }
 
 model Order {
-  id             Int         @id @default(autoincrement())
-  user_id        String
-  transaction_id Int         @unique
-  items          OrderItem[]
-  total          Float
-  status         OrderStatus
-  created_at     DateTime    @default(now())
-  updated_at     DateTime    @updatedAt
-
-  user        User         @relation(fields: [user_id], references: [id])
-  transaction Transaction? @relation(fields: [transaction_id], references: [id])
+  id              Int           @id @default(autoincrement())
+  user_id         String
+  transaction_id  Int           @unique
+  total           Float
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  items           OrderItem[]
+  status          OrderStatus
+  user            User          @relation(fields: [user_id], references: [id])
+  transaction     Transaction?  @relation(fields: [transaction_id], references: [id])
 
   @@map("orders")
 }
 
 model OrderItem {
-  id         Int    @id @default(autoincrement())
-  order_id   Int
-  product_id String
-  quantity   Int
-  price      Float
-
-  order   Order   @relation(fields: [order_id], references: [id])
-  product Product @relation(fields: [product_id], references: [id])
+  id          Int     @id @default(autoincrement())
+  order_id    Int
+  product_id  String
+  quantity    Int
+  price       Float
+  order       Order   @relation(fields: [order_id], references: [id])
+  product     Product @relation(fields: [product_id], references: [id])
 
   @@map("order_item")
 }
