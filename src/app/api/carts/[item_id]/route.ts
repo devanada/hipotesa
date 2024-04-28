@@ -22,11 +22,10 @@ export async function PUT(request: NextAuthRequest, context: Params) {
           { status: 401 }
         );
 
-      const { product_id, quantity } = (await request.json()) as CartSchema;
+      const { quantity } = (await request.json()) as CartSchema;
       const { item_id } = context.params;
 
       const validatedFields = cartSchema.safeParse({
-        product_id,
         quantity,
       });
 
@@ -40,10 +39,23 @@ export async function PUT(request: NextAuthRequest, context: Params) {
         );
       }
 
-      await prisma.cartItem.update({
-        where: { id: +item_id },
+      const data = await nullIfError(prisma.cartItem.update)({
+        where: {
+          id: +item_id,
+        },
         data: { quantity: { increment: quantity } },
       });
+
+      if (!data) {
+        return NextResponse.json(
+          {
+            message: "Edit item failed, data not found",
+            reason:
+              "The item you're trying to update might not have been created yet",
+          },
+          { status: 404 }
+        );
+      }
 
       return NextResponse.json({
         message: "Successfully updated item",
