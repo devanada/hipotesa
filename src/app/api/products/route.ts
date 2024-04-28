@@ -1,24 +1,34 @@
-import type { Product } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-import { ProductSchema, productSchema } from "@/lib/types/product";
+import { productSchema } from "@/lib/types/product";
+import { fileUploader, isNoAuth } from "@/lib/functions";
 import { prisma } from "@/lib/db";
+import { auth } from "@/auth";
 
-export async function POST(request: Request) {
+export const POST = auth(async function POST(request) {
   try {
+    if (isNoAuth(request.auth, true))
+      return NextResponse.json(
+        {
+          message: "You need to signin to access this endpoint",
+          reason: "Not authenticated",
+        },
+        { status: 401 }
+      );
+
     const formData = await request.formData();
 
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const price = formData.get("price") as string;
+    const image = formData.get("image") as File;
     const category_id = formData.get("category_id") as string;
 
     const validatedFields = productSchema.safeParse({
       name,
       description,
       price,
-      // TODO: Adjust image field to optional
-      // image: formData.get("image"),
+      image: image ?? undefined,
       category_id: category_id,
     });
 
@@ -32,11 +42,20 @@ export async function POST(request: Request) {
       );
     }
 
+    let imageUrl = null;
+    if (image) {
+      const uploadFile = await fileUploader(image, {
+        folder: "hipotesa-product",
+      });
+      imageUrl = uploadFile.data;
+    }
+
     const data = await prisma.product.create({
       data: {
         name,
         description,
         price,
+        image: imageUrl,
         category_id: +category_id!,
       },
     });
@@ -56,7 +75,7 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
+});
 
 export async function GET(request: Request) {
   try {

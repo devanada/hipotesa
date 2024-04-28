@@ -18,7 +18,6 @@ export const POST = auth(async function POST(request) {
 
     const { name, email, address } = (await request.json()) as UserSchema;
 
-    // TODO: Handle image upload here
     const validatedFields = userSchema.safeParse({
       name,
       email,

@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
 
 import { UserSchema, userSchema } from "@/lib/types/user";
-import { isNoAuth, nullIfError } from "@/lib/functions";
+import { fileUploader, isNoAuth, nullIfError } from "@/lib/functions";
 import { NextAuthRequest } from "@/lib/types/api";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 
 interface Params {
   params: { user_id: string };
+}
+interface DataToUpdate {
+  name: string;
+  email: string;
+  address: string;
+  image?: string;
 }
 
 export async function GET(request: NextAuthRequest, context: Params) {
@@ -64,13 +70,18 @@ export async function PUT(request: NextAuthRequest, context: Params) {
         );
 
       const { user_id } = context.params;
-      const { name, email, address } = (await request.json()) as UserSchema;
+      const formData = await request.formData();
 
-      // TODO: Handle image upload here
+      const name = formData.get("name") as string;
+      const email = formData.get("email") as string;
+      const address = formData.get("address") as string;
+      const image = formData.get("image") as File;
+
       const validatedFields = userSchema.safeParse({
         name,
         email,
         address,
+        image: image ?? undefined,
       });
 
       if (!validatedFields.success) {
@@ -83,15 +94,24 @@ export async function PUT(request: NextAuthRequest, context: Params) {
         );
       }
 
+      let dataToUpdate: DataToUpdate = {
+        name,
+        email,
+        address,
+      };
+
+      if (image) {
+        const uploadFile = await fileUploader(image, {
+          folder: "hipotesa-product",
+        });
+        dataToUpdate.image = uploadFile.data;
+      }
+
       const data = await nullIfError(prisma.user.update)({
         where: {
           id: user_id,
         },
-        data: {
-          name,
-          email,
-          address,
-        },
+        data: dataToUpdate,
       });
 
       if (!data) {
