@@ -5,9 +5,12 @@ const MAX_UPLOAD_SIZE = 1024 * 1024 * MAX_MB;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const productSchema = z.object({
-  name: z.string().min(10, {
-    message: "Product name must be at least 10 characters",
-  }),
+  name: z
+    .string()
+    .min(10, {
+      message: "Product name must be at least 10 characters",
+    })
+    .max(50, { message: "Product name cannot be more than 50 characters" }),
   description: z.string().min(10, {
     message: "Product description must be at least 10 characters",
   }),

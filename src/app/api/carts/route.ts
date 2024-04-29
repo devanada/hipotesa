@@ -53,7 +53,7 @@ export const POST = auth(async function POST(request) {
       });
     } else {
       await prisma.cartItem.create({
-        data: { cart_id: cart?.id, product_id, quantity },
+        data: { cart_id: cart?.id, product_id: product_id!, quantity },
       });
     }
 
@@ -93,7 +93,19 @@ export const GET = auth(async function GET(request) {
       create: {
         user_id: request.auth?.user?.id!,
       },
-      include: { cart_items: true },
+      include: {
+        cart_items: {
+          include: {
+            product: {
+              select: {
+                name: true,
+                price: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return NextResponse.json({

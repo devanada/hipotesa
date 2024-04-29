@@ -136,12 +136,12 @@ model CartItem {
 }
 
 model Transaction {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   user_id     String
   cart_id     Int
-  order_id    Int       @unique
-  amount      Float
+  amount      String
   status      TransactionStatus
+  payment_url String?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   user        User      @relation(fields: [user_id], references: [id])
@@ -152,15 +152,15 @@ model Transaction {
 }
 
 model Order {
-  id              Int           @id @default(autoincrement())
+  id              String        @id @default(cuid())
   user_id         String
-  transaction_id  Int           @unique
-  total           Float
+  transaction_id  String        @unique
+  total           String
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
   items           OrderItem[]
   status          OrderStatus
-  user            User          @relation(fields: [user_id], references: [id])
+  user            User?         @relation(fields: [user_id], references: [id])
   transaction     Transaction?  @relation(fields: [transaction_id], references: [id])
 
   @@map("orders")
@@ -168,10 +168,10 @@ model Order {
 
 model OrderItem {
   id          Int     @id @default(autoincrement())
-  order_id    Int
+  order_id    String
   product_id  String
   quantity    Int
-  price       Float
+  price       String
   order       Order   @relation(fields: [order_id], references: [id])
   product     Product @relation(fields: [product_id], references: [id])
 

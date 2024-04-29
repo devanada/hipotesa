@@ -70,6 +70,7 @@ const config = {
     },
     session({ session, user }) {
       session.user.role = user.role;
+      session.user.address = user.address;
       return session;
     },
   },
@@ -89,11 +90,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth(config);
 declare module "next-auth" {
   interface User {
     role: Roles;
+    address: string;
   }
 }
 
 declare module "@auth/core/adapters" {
   interface AdapterUser {
     role: Roles;
+    address: string;
   }
 }

@@ -102,7 +102,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
 
       if (image) {
         const uploadFile = await fileUploader(image, {
-          folder: "hipotesa-product",
+          folder: "hipotesa-user",
         });
         dataToUpdate.image = uploadFile.data;
       }

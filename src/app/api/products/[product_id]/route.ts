@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 
 import { fileUploader, isNoAuth, nullIfError } from "@/lib/functions";
 import { productSchema } from "@/lib/types/product";
+import { NextAuthRequest } from "@/lib/types/api";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
-import { NextAuthRequest } from "@/lib/types/api";
 
 interface Params {
   params: { product_id: string };
