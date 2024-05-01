@@ -15,11 +15,14 @@ const Navbar = async () => {
   const session = await auth();
 
   return (
-    <div className="supports-backdrop-blur:bg-background/60 sticky left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
+    <div className="supports-backdrop-blur:bg-antique-white/60 dark:supports-backdrop-blur:bg-charcoal/60 sticky left-0 right-0 top-0 z-20 border-b bg-antique-white/95 dark:bg-charcoal/95 backdrop-blur">
       <nav className="container flex h-16 items-center px-4">
         <div className="mr-4 flex">
           <div className="hidden md:flex">
-            <Link className="text-lg font-semibold text-nowrap" href="/">
+            <Link
+              className="text-lg font-semibold text-nowrap text-charcoal dark:text-antique-white"
+              href="/"
+            >
               Hipotesa
             </Link>
           </div>
@@ -32,7 +35,11 @@ const Navbar = async () => {
                 <AvatarFallback>H</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-44" align="end" forceMount>
+            <DropdownMenuContent
+              className="w-44 text-charcoal"
+              align="end"
+              forceMount
+            >
               {session ? (
                 <>
                   <DropdownMenuItem asChild>

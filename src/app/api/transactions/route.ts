@@ -167,7 +167,16 @@ export const GET = auth(async function GET(request) {
     // TODO: Add query params
     const data = await prisma.transaction.findMany({
       include: {
-        order: true,
+        order: {
+          select: {
+            id: true,
+            status: true,
+            total: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
       },
       cacheStrategy: { ttl: 60 },
     });

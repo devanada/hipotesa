@@ -25,6 +25,11 @@ export async function GET(request: Request, { params }: Params) {
       where: {
         id: product_id,
       },
+      include: {
+        category: {
+          select: { name: true },
+        },
+      },
       cacheStrategy: { ttl: 60 },
     });
 

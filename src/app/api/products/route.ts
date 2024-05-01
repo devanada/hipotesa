@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { productSchema } from "@/lib/types/product";
 import { fileUploader, isNoAuth } from "@/lib/functions";
@@ -77,10 +77,20 @@ export const POST = auth(async function POST(request) {
   }
 });
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const query = searchParams.get("category");
+    console.log(query);
     // TODO: Add query params
     const data = await prisma.product.findMany({
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
       cacheStrategy: { ttl: 60 },
     });
 

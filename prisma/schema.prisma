@@ -19,6 +19,11 @@ enum OrderStatus {
   RETURNED
 }
 
+enum Roles {
+  admin
+  user
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -64,15 +69,15 @@ model User {
   email         String    @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  role          String    @default("user")
+  role          Roles     @default(user)
   address       String?
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
-  Cart          Cart[]
-  Transaction   Transaction[]
-  Order         Order[]
+  cart          Cart[]
+  transaction   Transaction[]
+  order         Order[]
 
   @@map("users")
 }
@@ -96,8 +101,8 @@ model Product {
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   category    Category? @relation(fields: [category_id], references: [id])
-  CartItem    CartItem[]
-  OrderItem   OrderItem[]
+  cart_item    CartItem[]
+  order_item   OrderItem[]
 
   @@map("products")
 }
@@ -107,7 +112,7 @@ model Category {
   name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  posts Product[]
+  products Product[]
 
   @@map("categories")
 }
@@ -119,7 +124,7 @@ model Cart {
   updated_at DateTime @updatedAt
   user        User    @relation(fields: [user_id], references: [id])
   cart_items   CartItem[]
-  Transaction Transaction[]
+  transaction Transaction[]
 
   @@map("carts")
 }
