@@ -21,7 +21,7 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/products/:path*", "/admin/:path*", "/user/:path*"],
+  matcher: ["/products/:path*", "/dashboard/:path*", "/user/:path*"],
 };
 
 // export default async function middleware(request: NextRequest) {

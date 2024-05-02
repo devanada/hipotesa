@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const query = searchParams.get("category");
-    console.log(query);
+
     // TODO: Add query params
     const data = await prisma.product.findMany({
       include: {

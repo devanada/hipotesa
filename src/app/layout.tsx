@@ -30,9 +30,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <div className="h-full w-full overflow-auto flex flex-col">
+        <div className="h-full w-full flex flex-col">
           <Navbar />
-          <main className="grow container flex flex-col py-4 space-y-4">
+          <main className="grow container flex flex-col space-y-4 overflow-auto">
             {children}
           </main>
           <Toaster />

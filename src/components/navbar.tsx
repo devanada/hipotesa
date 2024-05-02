@@ -45,9 +45,15 @@ const Navbar = async () => {
                   <DropdownMenuItem asChild>
                     <Link href="/user">My Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/transactions">Transactions</Link>
-                  </DropdownMenuItem>
+                  {session.user?.role === "admin" ? (
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard">Dashboard</Link>
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem asChild>
+                      <Link href="/transactions">Transactions</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/user/settings">Settings</Link>
                   </DropdownMenuItem>

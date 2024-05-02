@@ -10,7 +10,7 @@ interface Props {
   data?: User;
 }
 
-export default async function SettingsForm(props: Props) {
+export default function SettingsForm(props: Props) {
   return (
     <form
       data-testid="form-login"

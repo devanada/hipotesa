@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { TransactionSchema, transactionSchema } from "@/lib/types/transactions";
-import { isNoAuth, nullIfError } from "@/lib/functions";
+import { isNoAuth } from "@/lib/functions";
 import { snap } from "@/lib/payment";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
