@@ -1,42 +1,30 @@
 import { NextResponse } from "next/server";
+import { auth as middleware } from "@/auth";
 
-import { auth } from "@/auth";
+export default middleware((req) => {
+  const pathname = req.nextUrl.pathname;
 
-const unprotectedRoutes = ["/", "/login", "/register"];
+  const redirectPatterns = [
+    "/dashboard/categories/:id",
+    "/dashboard/products/:id",
+    "/dashboard/users/:id",
+  ];
 
-export default auth((req) => {
-  const url = req.nextUrl.clone();
+  for (const pattern of redirectPatterns) {
+    const escapedPattern = pattern.replace(":id", "\\d+");
+    const regex = new RegExp(`^${escapedPattern}$`);
 
-  if (!req.auth) {
-    url.pathname = "/login";
+    if (pathname.match(regex)) {
+      const url = req.nextUrl.clone();
+      url.pathname = pathname.replace(/\/\d+$/, "");
 
-    return NextResponse.redirect(url);
+      return NextResponse.redirect(url, 308);
+    }
   }
 
-  if (req.auth && unprotectedRoutes.includes(url.pathname)) {
-    const absoluteURL = new URL("/", url.origin);
-
-    return NextResponse.redirect(absoluteURL.toString());
-  }
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/products/:path*", "/dashboard/:path*", "/user/:path*"],
+  matcher: ["/dashboard/:path*"],
 };
-
-// export default async function middleware(request: NextRequest) {
-//   const session = await auth();
-
-//   const isProtectedRoute = protectedRoutes.some((prefix) =>
-//     request.nextUrl.pathname.startsWith(prefix)
-//   );
-
-//   if (!session && isProtectedRoute) {
-//     const absoluteURL = new URL("/", request.nextUrl.origin);
-//     return NextResponse.redirect(absoluteURL.toString());
-//   }
-//   if (session && unprotectedRoutes.includes(request.nextUrl.pathname)) {
-//     const absoluteURL = new URL("/dashboard", request.nextUrl.origin);
-//     return NextResponse.redirect(absoluteURL.toString());
-//   }
-// }

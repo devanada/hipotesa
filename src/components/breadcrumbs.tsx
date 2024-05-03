@@ -21,7 +21,7 @@ export default function Breadcrumbs() {
         {segments.map((segment, index) => {
           if (index === segments.length - 1) {
             return (
-              <BreadcrumbItem key={index}>
+              <BreadcrumbItem key={segment}>
                 <BreadcrumbPage className="capitalize">
                   {segment}
                 </BreadcrumbPage>
@@ -30,14 +30,14 @@ export default function Breadcrumbs() {
           } else {
             return (
               <>
-                <BreadcrumbItem key={index}>
+                <BreadcrumbItem key={segment}>
                   <BreadcrumbLink asChild>
                     <Link href={`/dashboard/${segment}`} className="capitalize">
                       {segment}
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator key={`${segment}-separator`} />
               </>
             );
           }

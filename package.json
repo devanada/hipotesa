@@ -28,6 +28,7 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.0",
+    "dayjs": "^1.11.11",
     "lucide-react": "^0.341.0",
     "midtrans-node-client": "^0.0.6",
     "next": "14.1.0",

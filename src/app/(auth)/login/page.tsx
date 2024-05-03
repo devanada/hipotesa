@@ -1,6 +1,5 @@
 import React from "react";
 
-import LoginForm from "./form";
 import { Button } from "@/components/ui/button";
 
 import { signIn, providerMap } from "@/auth";

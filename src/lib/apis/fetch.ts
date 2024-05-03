@@ -1,29 +1,29 @@
 import { cookies } from "next/headers";
-import { IResponseSuccess } from "../types/api";
+import { IResponseSuccess, IResponseFailed } from "../types/api";
 
 const _apiHost = process.env.BASE_URL;
 
 type Params =
   | FormData
   | {
-      [key: string]: string;
+      [key: string]: FormDataEntryValue | string;
     };
 
 function request<TResponse>(
   url: string,
   method: "POST" | "PUT",
   params: Params
-): Promise<IResponseSuccess<TResponse>>;
+): Promise<any>;
 function request<TResponse>(
   url: string,
   method: "GET" | "DELETE",
   params?: Params
-): Promise<IResponseSuccess<TResponse>>;
+): Promise<any>;
 async function request<TResponse>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
   params?: Params
-): Promise<IResponseSuccess<TResponse>> {
+) {
   const options: RequestInit = {
     method,
     headers: {
@@ -37,7 +37,7 @@ async function request<TResponse>(
   if (params) {
     if (["GET", "DELETE"].includes(method)) {
       url += "?" + objectToQueryString(params as { [key: string]: string });
-      options.next = { revalidate: 10 };
+      options.next = { revalidate: 0 };
     } else {
       options.body = JSON.stringify(params);
     }
@@ -45,28 +45,17 @@ async function request<TResponse>(
 
   const response = await fetch(_apiHost + url, options);
 
-  if (response.status !== 200) {
-    return generateErrorResponse(
-      "The server responded with an unexpected status."
-    );
+  if (response.ok) {
+    return (await response.json()) as IResponseSuccess<TResponse>;
   }
 
-  const result = (await response.json()) as IResponseSuccess<TResponse>;
-
-  return result;
+  return (await response.json()) as IResponseFailed;
 }
 
 function objectToQueryString(obj: { [key: string]: string }) {
   return Object.keys(obj)
     .map((key) => key + "=" + obj[key])
     .join("&");
-}
-
-function generateErrorResponse(message: string) {
-  return {
-    status: "error",
-    message,
-  };
 }
 
 function get<TResponse>(url: string, params?: Params) {

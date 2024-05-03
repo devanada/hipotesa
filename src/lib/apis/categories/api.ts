@@ -1,31 +1,15 @@
 import { Category } from "@prisma/client";
 
 import { IResponseSuccess } from "@/lib/types/api";
+import Fetch from "@/lib/apis/fetch";
 import { ProductExtend } from "./type";
 
 export const getCategories = async (params?: any) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
-    next: { revalidate: 1 },
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return (await res.json()) as IResponseSuccess<Category[]>;
+  const response = await Fetch.get<Category[]>("/api/categories");
+  return response as IResponseSuccess<Category[]>;
 };
 
-export const getDetailProduct = async (product_id: string) => {
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/products/${product_id}`,
-    {
-      next: { revalidate: 1 },
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return (await res.json()) as IResponseSuccess<ProductExtend>;
+export const getCategoriesById = async (params?: any) => {
+  const response = await Fetch.get<Category>(`/api/categories/${params}`);
+  return response as IResponseSuccess<Category>;
 };

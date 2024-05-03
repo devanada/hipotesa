@@ -2,9 +2,16 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { getCategoriesById } from "@/lib/apis/categories/api";
 import Form from "./form";
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: { category_id: string };
+}) {
+  const { data } = await getCategoriesById(params.category_id);
+
   return (
     <main className="w-full grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="w-full mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
@@ -32,7 +39,7 @@ export default async function Page() {
             </Button>
           </div>
         </div>
-        <Form />
+        <Form data={data} />
         <div className="flex items-center justify-center gap-2 md:hidden">
           <Button variant="outline" size="sm" type="reset" form="create-form">
             Discard

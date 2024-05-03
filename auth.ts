@@ -1,15 +1,12 @@
 import type { Provider } from "next-auth/providers";
 import type { NextAuthConfig } from "next-auth";
-import type { User } from "@prisma/client";
 
-import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 
-import { IResponseFailed, IResponseSuccess } from "@/lib/types/api";
 import { Roles } from "@/lib/types/user";
 import { prisma } from "@/lib/db";
 
@@ -22,26 +19,6 @@ const providers: Provider[] = [
     apiKey: process.env.AUTH_RESEND_KEY,
     from: "no-reply@devanada.com",
   }),
-  // Credentials({
-  //   async authorize(credentials) {
-  //     const response = await fetch(`${process.env.BASE_URL}/api/auth/login`, {
-  //       method: "POST",
-  //       headers: {
-  //         accept: "application/json",
-  //         "content-type": "application/json",
-  //       },
-  //       body: JSON.stringify(credentials),
-  //     });
-
-  //     if (response.ok) {
-  //       const { data } = (await response.json()) as IResponseSuccess<User>;
-  //       return data;
-  //     }
-
-  //     const result = (await response.json()) as IResponseFailed;
-  //     throw new Error(result.message);
-  //   },
-  // }),
 ];
 
 const config = {
