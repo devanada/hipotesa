@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "h-dvh w-full bg-antique-white dark:bg-charcoal font-sans antialiased flex flex-col",
+          "h-dvh w-full bg-antique-white dark:bg-charcoal font-sans antialiased flex flex-col overflow-hidden",
           fontSans.variable
         )}
       >

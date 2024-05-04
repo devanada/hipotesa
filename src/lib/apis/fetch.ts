@@ -27,19 +27,26 @@ async function request<TResponse>(
   const options: RequestInit = {
     method,
     headers: {
-      "Content-Type": "application/json",
       Cookie: `authjs.session-token=${
         cookies().get("authjs.session-token")?.value ?? ""
       }`,
     },
   };
+  const headers = options?.headers
+    ? new Headers(options.headers)
+    : new Headers();
 
   if (params) {
     if (["GET", "DELETE"].includes(method)) {
       url += "?" + objectToQueryString(params as { [key: string]: string });
       options.next = { revalidate: 0 };
     } else {
-      options.body = JSON.stringify(params);
+      if (params instanceof FormData) {
+        options.body = params;
+      } else {
+        options.body = JSON.stringify(params);
+        headers.set("Content-Type", "application/json");
+      }
     }
   }
 

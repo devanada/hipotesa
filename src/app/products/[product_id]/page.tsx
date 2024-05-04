@@ -1,11 +1,11 @@
-import Image from "next/image";
 import { TagIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { badgeVariants } from "@/components/ui/badge";
 
-import { getDetailProduct } from "@/lib/apis/products/api";
+import { getProductById } from "@/lib/apis/products/api";
 import { formatCurrency } from "@/lib/functions";
 
 interface Params {
@@ -17,10 +17,10 @@ export default async function Page({
 }: {
   params: Params;
 }) {
-  const product = await getDetailProduct(product_id);
+  const product = await getProductById(product_id);
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto py-12 px-4 md:px-0">
+    <div className="w-full h-full grid md:grid-cols-2 gap-8 max-w-6xl mx-auto py-12 px-4 md:px-0">
       <div className="grid gap-6">
         <Image
           src={product.data.image ?? ""}
@@ -51,7 +51,7 @@ export default async function Page({
           </div>
         </div>
       </div>
-      <div className="grid gap-4 text-sm leading-loose text-charcoal dark:text-antique-white">
+      <div className="grid gap-4 text-sm leading-loose text-charcoal dark:text-antique-white whitespace-pre-wrap overflow-auto">
         <p>{product.data.description}</p>
       </div>
     </div>

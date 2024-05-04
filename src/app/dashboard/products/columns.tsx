@@ -58,7 +58,9 @@ export const columns: ColumnDef<ProductExtend>[] = [
               <Link href={`/products/${product.id}`}>See detail product</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>Edit Product</Link>
+              <Link href={`/dashboard/products/${product.id}/edit`}>
+                Edit Product
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

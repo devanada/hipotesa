@@ -5,8 +5,14 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Form from "./form";
 
 import { getCategories } from "@/lib/apis/categories/api";
+import { getProductById } from "@/lib/apis/products/api";
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: { product_id: string };
+}) {
+  const { data } = await getProductById(params.product_id);
   const { data: categories } = await getCategories();
 
   return (
@@ -36,7 +42,7 @@ export default async function Page() {
             </Button>
           </div>
         </div>
-        <Form categories={categories} />
+        <Form data={data} categories={categories} />
         <div className="flex items-center justify-center gap-2 md:hidden">
           <Button variant="outline" size="sm" type="reset" form="create-form">
             Discard

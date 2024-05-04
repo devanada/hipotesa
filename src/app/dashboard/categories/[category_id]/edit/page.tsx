@@ -2,15 +2,16 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { getCategoriesById } from "@/lib/apis/categories/api";
 import Form from "./form";
+
+import { getCategoryById } from "@/lib/apis/categories/api";
 
 export default async function Page({
   params,
 }: {
   params: { category_id: string };
 }) {
-  const { data } = await getCategoriesById(params.category_id);
+  const { data } = await getCategoryById(params.category_id);
 
   return (
     <main className="w-full grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

@@ -1,29 +1,13 @@
 import { IResponseSuccess } from "@/lib/types/api";
+import Fetch from "@/lib/apis/fetch";
 import { ProductExtend } from "./type";
 
 export const getProducts = async (params?: any) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/products`, {
-    next: { revalidate: 1 },
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return (await res.json()) as IResponseSuccess<ProductExtend[]>;
+  const response = await Fetch.get<ProductExtend[]>("/api/products");
+  return response as IResponseSuccess<ProductExtend[]>;
 };
 
-export const getDetailProduct = async (product_id: string) => {
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/products/${product_id}`,
-    {
-      next: { revalidate: 1 },
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return (await res.json()) as IResponseSuccess<ProductExtend>;
+export const getProductById = async (params?: any) => {
+  const response = await Fetch.get<ProductExtend>(`/api/products/${params}`);
+  return response as IResponseSuccess<ProductExtend>;
 };
