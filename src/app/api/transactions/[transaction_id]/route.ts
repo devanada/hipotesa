@@ -30,20 +30,23 @@ export async function GET(request: NextAuthRequest, context: Params) {
           id: transaction_id,
         },
         include: {
+          user: {
+            select: {
+              email: true,
+              name: true,
+              address: true,
+            },
+          },
           order: {
             select: {
               id: true,
               total: true,
               status: true,
-            },
-            include: {
               items: {
                 select: {
                   id: true,
                   quantity: true,
                   price: true,
-                },
-                include: {
                   product: {
                     select: {
                       id: true,

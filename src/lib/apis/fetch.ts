@@ -50,13 +50,16 @@ async function request<TResponse>(
     }
   }
 
-  const response = await fetch(_apiHost + url, options);
+  try {
+    const response = await fetch(_apiHost + url, options);
+    if (response.ok) {
+      return (await response.json()) as IResponseSuccess<TResponse>;
+    }
 
-  if (response.ok) {
-    return (await response.json()) as IResponseSuccess<TResponse>;
+    return Promise.reject((await response.json()) as IResponseFailed);
+  } catch (error) {
+    throw error;
   }
-
-  return (await response.json()) as IResponseFailed;
 }
 
 function objectToQueryString(obj: { [key: string]: string }) {

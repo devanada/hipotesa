@@ -15,9 +15,11 @@ export async function createProduct(
   try {
     await Fetch.create<ProductExtend>("/api/products", formData);
   } catch (error) {
+    const { message, reason } = error as IResponseFailed;
+
     return {
-      message: "Failed to create product",
-      reason: JSON.stringify(error),
+      message: message,
+      reason: reason,
     };
   }
 
@@ -33,9 +35,11 @@ export async function editProduct(
   try {
     await Fetch.update<ProductExtend>(`/api/products/${categoryId}`, formData);
   } catch (error) {
+    const { message, reason } = error as IResponseFailed;
+
     return {
-      message: "Failed to create product",
-      reason: JSON.stringify(error),
+      message: message,
+      reason: reason,
     };
   }
 

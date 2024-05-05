@@ -2,7 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +15,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { OrderExtend } from "@/lib/apis/orders/type";
+import { OrderStatus } from "@prisma/client";
+import { editTransaction } from "@/lib/actions/transactions";
 
 export const columns: ColumnDef<OrderExtend>[] = [
   {
@@ -41,15 +52,51 @@ export const columns: ColumnDef<OrderExtend>[] = [
   {
     accessorKey: "order.status",
     header: "Order Status",
+    cell: ({ row }) => {
+      const data = row.original;
+
+      return (
+        <Select
+          defaultValue={data.order.status}
+          onValueChange={async (val) => {
+            const result = await editTransaction(data.id, {
+              status: val as keyof typeof OrderStatus,
+            });
+
+            if (result?.reason) {
+              toast.error(result.message, {
+                description: JSON.stringify(result.reason),
+              });
+            }
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent>
+            {[...Object.keys(OrderStatus)].map((status) => (
+              <SelectItem value={status} key={status}>
+                {status}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    },
   },
   {
     accessorKey: "created_at",
     header: "Date",
+    cell: ({ row }) => {
+      const data = row.original;
+
+      return dayjs(data.created_at).format("DD MMM YYYY");
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const data = row.original;
 
       return (
         <DropdownMenu>
@@ -63,10 +110,9 @@ export const columns: ColumnDef<OrderExtend>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>See detail product</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>Edit Product</Link>
+              <Link href={`/dashboard/orders/${data.id}`}>
+                See detail order
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

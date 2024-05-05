@@ -34,8 +34,8 @@ export default function RootLayout({
           <Navbar />
           <main className="grow container flex flex-col space-y-4 overflow-auto">
             {children}
+            <Toaster richColors position="top-center" />
           </main>
-          <Toaster />
         </div>
       </body>
     </html>

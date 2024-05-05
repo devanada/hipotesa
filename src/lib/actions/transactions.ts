@@ -2,20 +2,19 @@
 
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { Category } from "@prisma/client";
 
 import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
+import { ProductExtend } from "@/lib/apis/products/type";
 import { FormState } from "@/lib/hooks/useFormAction";
 import Fetch from "@/lib/apis/fetch";
+import { OrderSchema } from "../types/transactions";
 
-export async function createCategory(
+export async function createTransaction(
   prevState: FormState,
   formData: FormData
 ): Promise<IResponseFailed> {
   try {
-    const body = Object.fromEntries(formData.entries());
-
-    await Fetch.create<Category>("/api/categories", body);
+    await Fetch.create<ProductExtend>("/api/products", formData);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -25,19 +24,19 @@ export async function createCategory(
     };
   }
 
-  revalidateTag("categories");
-  redirect("/dashboard/categories");
+  revalidateTag("products");
+  redirect("/dashboard/products");
 }
 
-export async function editCategory(
-  categoryId: number,
-  prevState: FormState,
-  formData: FormData
-): Promise<IResponseFailed> {
+export async function editTransaction(
+  transactionId: string,
+  data: OrderSchema
+) {
   try {
-    const body = Object.fromEntries(formData.entries());
-
-    await Fetch.update<Category>(`/api/categories/${categoryId}`, body);
+    await Fetch.update<ProductExtend>(
+      `/api/transactions/${transactionId}`,
+      data
+    );
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -47,6 +46,5 @@ export async function editCategory(
     };
   }
 
-  revalidateTag("categories");
-  redirect("/dashboard/categories");
+  revalidateTag("transactions");
 }
