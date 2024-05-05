@@ -4,7 +4,7 @@ import { OrderExtend } from "./type";
 
 export const getOrders = async (params?: any) => {
   const response = await Fetch.get<OrderExtend[]>("/api/transactions");
-  return response;
+  return response as IResponseSuccess<OrderExtend[]>;
 };
 
 export const getOrderById = async (params?: any) => {

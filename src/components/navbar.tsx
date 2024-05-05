@@ -1,3 +1,4 @@
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -8,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 
 import { auth, signIn, signOut } from "@/auth";
 
@@ -28,6 +30,12 @@ const Navbar = async () => {
           </div>
         </div>
         <div className="flex gap-4 items-center justify-end h-full w-full">
+          <Link
+            className={buttonVariants({ variant: "ghost", size: "icon" })}
+            href="/cart"
+          >
+            <ShoppingCart />
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>

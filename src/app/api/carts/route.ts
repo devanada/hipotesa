@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {
   try {
-    if (isNoAuth(request.auth, true))
+    if (isNoAuth(request.auth))
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -49,7 +49,7 @@ export const POST = auth(async function POST(request) {
     if (existingItem) {
       await prisma.cartItem.update({
         where: { id: existingItem.id },
-        data: { quantity: { increment: quantity } },
+        data: { quantity },
       });
     } else {
       await prisma.cartItem.create({

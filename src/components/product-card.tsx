@@ -36,7 +36,7 @@ export function ProductCard({
           height={height}
           priority
           className={cn(
-            "h-auto w-auto object-contain",
+            "h-auto w-auto object-contain m-auto",
             aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
           )}
         />

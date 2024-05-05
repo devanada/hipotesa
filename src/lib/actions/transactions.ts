@@ -5,16 +5,25 @@ import { redirect } from "next/navigation";
 
 import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
 import { ProductExtend } from "@/lib/apis/products/type";
-import { FormState } from "@/lib/hooks/useFormAction";
-import Fetch from "@/lib/apis/fetch";
 import { OrderSchema } from "../types/transactions";
+import Fetch from "@/lib/apis/fetch";
 
 export async function createTransaction(
-  prevState: FormState,
   formData: FormData
 ): Promise<IResponseFailed> {
+  const body = {
+    amount: formData.get("amount") as string,
+    cart_id: +(formData.get("cart_id") as string),
+  };
+  let paymentUrl = "";
+
   try {
-    await Fetch.create<ProductExtend>("/api/products", formData);
+    const response = (await Fetch.create(
+      "/api/transactions",
+      body
+    )) as IResponseSuccess<string>;
+
+    paymentUrl = response.data;
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -24,8 +33,7 @@ export async function createTransaction(
     };
   }
 
-  revalidateTag("products");
-  redirect("/dashboard/products");
+  redirect(paymentUrl);
 }
 
 export async function editTransaction(

@@ -13,7 +13,7 @@ interface Params {
 export async function PUT(request: NextAuthRequest, context: Params) {
   return auth(async () => {
     try {
-      if (isNoAuth(request.auth, true))
+      if (isNoAuth(request.auth))
         return NextResponse.json(
           {
             message: "You need to signin to access this endpoint",
@@ -43,7 +43,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
         where: {
           id: +item_id,
         },
-        data: { quantity: { increment: quantity } },
+        data: { quantity },
       });
 
       if (!data) {

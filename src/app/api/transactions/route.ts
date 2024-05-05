@@ -155,7 +155,7 @@ export const POST = auth(async function POST(request) {
 
 export const GET = auth(async function GET(request) {
   try {
-    if (isNoAuth(request.auth, true))
+    if (isNoAuth(request.auth))
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",

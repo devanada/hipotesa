@@ -6,7 +6,7 @@ const _apiHost = process.env.BASE_URL;
 type Params =
   | FormData
   | {
-      [key: string]: FormDataEntryValue | string;
+      [key: string]: FormDataEntryValue | string | number;
     };
 
 function request<TResponse>(

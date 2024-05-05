@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { TagIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { badgeVariants } from "@/components/ui/badge";
 
 import { getProductById } from "@/lib/apis/products/api";
 import { formatCurrency } from "@/lib/functions";
+import { addItem } from "@/lib/actions/carts";
 
 interface Params {
   product_id: string;
@@ -18,6 +20,19 @@ export default async function Page({
   params: Params;
 }) {
   const product = await getProductById(product_id);
+
+  async function addItemToCart() {
+    "use server";
+
+    const payload = {
+      product_id,
+      quantity: 1,
+    };
+
+    addItem(payload);
+
+    redirect("/cart");
+  }
 
   return (
     <div className="w-full h-full grid md:grid-cols-2 gap-8 max-w-6xl mx-auto py-12 px-4 md:px-0">
@@ -47,7 +62,9 @@ export default async function Page({
             <span className="text-2xl text-charcoal/75 dark:text-antique-white/75">
               {formatCurrency(+product.data.price)}
             </span>
-            <Button size="lg">Add to Cart</Button>
+            <form action={addItemToCart}>
+              <Button size="lg">Add to Cart</Button>
+            </form>
           </div>
         </div>
       </div>
