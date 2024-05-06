@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 
-import { UserSchema, userSchema } from "@/lib/types/user";
-import { isNoAuth } from "@/lib/functions";
+import { UserSchema, userBaseSchema, userSchema } from "@/lib/types/users";
+import { fileUploader, isNoAuth } from "@/lib/functions";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
+
+interface DataToUpdate {
+  name: string;
+  address: string;
+  image?: string;
+}
 
 export const POST = auth(async function POST(request) {
   try {
@@ -85,6 +91,80 @@ export const GET = auth(async function GET(request) {
     return NextResponse.json(
       {
         message: "Get users failed, please try again later",
+        reason: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+});
+
+export const PUT = auth(async function POST(request) {
+  try {
+    if (isNoAuth(request.auth))
+      return NextResponse.json(
+        {
+          message: "You need to signin to access this endpoint",
+          reason: "Not authenticated",
+        },
+        { status: 401 }
+      );
+
+    const formData = await request.formData();
+
+    const name = formData.get("name") as string;
+    const address = formData.get("address") as string;
+    const checkImage = formData.get("image") as File;
+    let image: File | undefined;
+
+    if (checkImage.size !== 0) {
+      image = checkImage;
+    }
+
+    const validatedFields = userBaseSchema.safeParse({
+      name,
+      address,
+      image,
+    });
+
+    if (!validatedFields.success) {
+      return NextResponse.json(
+        {
+          message: "Edit profile failed, please check your input again",
+          reason: validatedFields.error.flatten().fieldErrors,
+        },
+        { status: 400 }
+      );
+    }
+
+    let dataToUpdate: DataToUpdate = {
+      name,
+      address,
+    };
+
+    if (image) {
+      const uploadFile = await fileUploader(image, {
+        folder: "hipotesa-user",
+      });
+      dataToUpdate.image = uploadFile.data;
+    }
+
+    const data = await prisma.user.update({
+      where: {
+        id: request.auth?.user?.id,
+      },
+      data: dataToUpdate,
+    });
+
+    return NextResponse.json({
+      message: "Successfully edited profile",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json(
+      {
+        message: "Edit profile failed, please try again later",
         reason: (error as Error).message,
       },
       { status: 500 }

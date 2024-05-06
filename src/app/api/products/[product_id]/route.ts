@@ -79,14 +79,19 @@ export async function PUT(request: NextAuthRequest, context: Params) {
       const name = formData.get("name") as string;
       const description = formData.get("description") as string;
       const price = formData.get("price") as string;
-      const image = formData.get("image") as File;
+      const checkImage = formData.get("image") as File;
       const category_id = formData.get("category_id") as string;
+      let image: File | undefined;
+
+      if (checkImage.size !== 0) {
+        image = checkImage;
+      }
 
       const validatedFields = productSchema.safeParse({
         name,
         description,
         price,
-        image: image ?? undefined,
+        image: image,
         category_id: category_id,
       });
 

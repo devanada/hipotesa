@@ -6,23 +6,15 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export type Roles = "user" | "admin";
 
-export const userSchema = z.object({
-  name: z.string().min(3, {
-    message: "Name is required",
+export const userBaseSchema = z.object({
+  name: z.string({
+    required_error: "Name is required",
   }),
-  email: z
-    .string()
-    .min(1, {
-      message: "Email is required",
-    })
-    .email({
-      message: "Invalid email address",
-    }),
   image: z
     .instanceof(File)
     .optional()
     .refine(
-      (file) => !file || file.size <= MAX_UPLOAD_SIZE,
+      (file) => !file || file.size !== 0 || file.size <= MAX_UPLOAD_SIZE,
       `Max image size is ${MAX_MB}MB`
     )
     .refine(
@@ -32,5 +24,17 @@ export const userSchema = z.object({
     ),
   address: z.string().optional(),
 });
+export const userSchema = z
+  .object({
+    email: z
+      .string({
+        required_error: "Email is required",
+      })
+      .email({
+        message: "Invalid email address",
+      }),
+  })
+  .merge(userBaseSchema);
 
+export type UserBaseSchema = z.infer<typeof userBaseSchema>;
 export type UserSchema = z.infer<typeof userSchema>;

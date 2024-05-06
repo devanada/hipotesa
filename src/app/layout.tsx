@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/navbar";
 
@@ -30,13 +31,20 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <div className="h-full w-full flex flex-col">
-          <Navbar />
-          <main className="grow container flex flex-col space-y-4 overflow-auto">
-            {children}
-            <Toaster richColors position="top-center" />
-          </main>
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="h-full w-full flex flex-col">
+            <Navbar />
+            <main className="grow container flex flex-col space-y-4 overflow-auto">
+              {children}
+              <Toaster richColors position="top-center" />
+            </main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

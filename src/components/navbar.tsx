@@ -43,11 +43,7 @@ const Navbar = async () => {
                 <AvatarFallback>H</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-44 text-charcoal"
-              align="end"
-              forceMount
-            >
+            <DropdownMenuContent className="w-44" align="end" forceMount>
               {session ? (
                 <>
                   <DropdownMenuItem asChild>
