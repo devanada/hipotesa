@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import DataTable from "@/components/data-table";
 
 import { getOrders } from "@/lib/apis/orders/api";
@@ -8,13 +10,25 @@ export default async function Page() {
 
   return (
     <div>
-      <DataTable
-        columns={columns}
-        data={data}
-        title="Order"
-        description="Manage your orders"
-        showButton={false}
-      />
+      <Suspense
+        fallback={
+          <DataTable
+            columns={columns}
+            data={[]}
+            title="Order"
+            description="Manage your orders"
+            showButton={false}
+          />
+        }
+      >
+        <DataTable
+          columns={columns}
+          data={data}
+          title="Order"
+          description="Manage your orders"
+          showButton={false}
+        />
+      </Suspense>
     </div>
   );
 }

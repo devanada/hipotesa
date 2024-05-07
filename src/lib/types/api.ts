@@ -6,6 +6,15 @@ export interface IResponseSuccess<TData = any> {
   data: TData;
 }
 
+export interface IResponsePagination<TData = any> {
+  message: string;
+  metadata: {
+    totalCount: number;
+    totalPages: number;
+  };
+  data: TData;
+}
+
 export interface IResponseFailed {
   message: string;
   reason: string;

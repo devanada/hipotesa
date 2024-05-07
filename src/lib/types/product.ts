@@ -2,7 +2,12 @@ import * as z from "zod";
 
 const MAX_MB = 2;
 const MAX_UPLOAD_SIZE = 1024 * 1024 * MAX_MB;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 export const productSchema = z.object({
   name: z
@@ -27,7 +32,7 @@ export const productSchema = z.object({
     .refine(
       (file) =>
         !file || file.type === "" || ACCEPTED_IMAGE_TYPES.includes(file.type),
-      "Only .jpg, .jpeg, and .png formats are supported"
+      "Only .jpg, .jpeg, .png, and .webp formats are supported"
     ),
   category_id: z.string().min(1, {
     message: "Category is required",

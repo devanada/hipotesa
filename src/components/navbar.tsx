@@ -30,12 +30,14 @@ const Navbar = async () => {
           </div>
         </div>
         <div className="flex gap-4 items-center justify-end h-full w-full">
-          <Link
-            className={buttonVariants({ variant: "ghost", size: "icon" })}
-            href="/cart"
-          >
-            <ShoppingCart />
-          </Link>
+          {session?.user?.role === "user" ? (
+            <Link
+              className={buttonVariants({ variant: "ghost", size: "icon" })}
+              href="/cart"
+            >
+              <ShoppingCart />
+            </Link>
+          ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>

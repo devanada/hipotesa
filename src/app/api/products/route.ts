@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 import { productSchema } from "@/lib/types/product";
-import { fileUploader, isNoAuth } from "@/lib/functions";
+import { constructQuery, fileUploader, isNoAuth } from "@/lib/functions";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 
@@ -79,17 +80,19 @@ export const POST = auth(async function POST(request) {
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get("category");
+    let query = constructQuery<Prisma.ProductFindManyArgs>(request);
 
-    // TODO: Add query params
     const data = await prisma.product.findMany({
+      ...query,
       include: {
         category: {
           select: {
             name: true,
           },
         },
+      },
+      orderBy: {
+        created_at: "desc",
       },
       cacheStrategy: { ttl: 60 },
     });
@@ -104,8 +107,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const totalCount = await prisma.product.count();
+    const totalPages = Math.ceil(totalCount / 10);
+
     return NextResponse.json({
       message: "Successfully get products",
+      metadata: {
+        totalCount,
+        totalPages,
+      },
       data,
     });
   } catch (error) {

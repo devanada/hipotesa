@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { Session } from "next-auth";
 
 import { cloudinaryConfig } from "@/lib/storage";
@@ -76,4 +77,23 @@ export const formatCurrency = (number: number) => {
     style: "currency",
     currency: "IDR",
   }).format(number);
+};
+
+export const constructQuery = <T>(request: NextRequest) => {
+  const searchParams = request.nextUrl.searchParams;
+  const page = searchParams.get("page");
+  let query = {
+    take: 10,
+  } as T;
+
+  if (page) {
+    const skip = (+page - 1) * 10;
+
+    query = {
+      ...query,
+      skip,
+    };
+  }
+
+  return query;
 };

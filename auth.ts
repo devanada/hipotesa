@@ -7,7 +7,7 @@ import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
 import NextAuth from "next-auth";
 
-import { Roles } from "@/lib/types/user";
+import { Roles } from "@/lib/types/users";
 import { prisma } from "@/lib/db";
 
 const providers: Provider[] = [
