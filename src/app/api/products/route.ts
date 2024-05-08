@@ -97,7 +97,9 @@ export async function GET(request: NextRequest) {
       cacheStrategy: { ttl: 60 },
     });
 
-    const totalCount = await prisma.product.count();
+    const totalCount = await prisma.product.count({
+      where: query.where,
+    });
     const totalPages = Math.ceil(totalCount / 10);
 
     return NextResponse.json({

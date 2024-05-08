@@ -1,6 +1,6 @@
 {
   "name": "hipotesa",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -30,6 +30,7 @@
     "cloudinary": "^2.2.0",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.11",
+    "embla-carousel-react": "^8.0.4",
     "lodash": "^4.17.21",
     "lucide-react": "^0.341.0",
     "midtrans-node-client": "^0.0.6",

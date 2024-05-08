@@ -82,6 +82,8 @@ export const formatCurrency = (number: number) => {
 export const constructQuery = <T>(request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page");
+  const category = searchParams.get("category");
+
   let query = {
     take: 10,
   } as T;
@@ -92,6 +94,17 @@ export const constructQuery = <T>(request: NextRequest) => {
     query = {
       ...query,
       skip,
+    };
+  }
+
+  if (category) {
+    query = {
+      ...query,
+      where: {
+        category: {
+          name: category,
+        },
+      },
     };
   }
 

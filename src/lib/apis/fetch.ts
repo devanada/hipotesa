@@ -24,11 +24,15 @@ async function request<TResponse>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   params?: Params
 ) {
+  const sessionCookie =
+    process.env.NODE_ENV === "production"
+      ? "__Secure-authjs.session-token"
+      : "authjs.session-token";
   const options: RequestInit = {
     method,
     headers: {
-      Cookie: `authjs.session-token=${
-        cookies().get("authjs.session-token")?.value ?? ""
+      Cookie: `${sessionCookie}=${
+        cookies().get(`${sessionCookie}`)?.value ?? ""
       }`,
     },
   };
