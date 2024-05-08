@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 import { UserSchema, userBaseSchema, userSchema } from "@/lib/types/users";
-import { fileUploader, isNoAuth } from "@/lib/functions";
+import { constructQuery, fileUploader, isNoAuth } from "@/lib/functions";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 
@@ -67,6 +68,8 @@ export const POST = auth(async function POST(request) {
 
 export const GET = auth(async function GET(request) {
   try {
+    let query = constructQuery<Prisma.UserFindManyArgs>(request);
+
     if (isNoAuth(request.auth, true))
       return NextResponse.json(
         {
@@ -76,13 +79,20 @@ export const GET = auth(async function GET(request) {
         { status: 401 }
       );
 
-    // TODO: Add query params
     const data = await prisma.user.findMany({
+      ...query,
       cacheStrategy: { ttl: 60 },
     });
 
+    const totalCount = await prisma.user.count();
+    const totalPages = Math.ceil(totalCount / 10);
+
     return NextResponse.json({
       message: "Successfully get users",
+      metadata: {
+        totalCount,
+        totalPages,
+      },
       data,
     });
   } catch (error) {

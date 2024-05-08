@@ -66,17 +66,6 @@ export default function Sidebar() {
             <TooltipContent side="right">Users</TooltipContent>
           </Tooltip>
         </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
-          <Tooltip>
-            <TooltipTrigger>
-              <NavLink href="/dashboard">
-                <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
-              </NavLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
-        </nav>
       </aside>
     </TooltipProvider>
   );

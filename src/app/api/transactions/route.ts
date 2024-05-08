@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 import { TransactionSchema, transactionSchema } from "@/lib/types/transactions";
-import { isNoAuth } from "@/lib/functions";
+import { constructQuery, isNoAuth } from "@/lib/functions";
 import { snap } from "@/lib/payment";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
@@ -155,7 +156,9 @@ export const POST = auth(async function POST(request) {
 
 export const GET = auth(async function GET(request) {
   try {
-    if (isNoAuth(request.auth))
+    let query = constructQuery<Prisma.TransactionFindManyArgs>(request);
+
+    if (isNoAuth(request.auth)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -163,9 +166,14 @@ export const GET = auth(async function GET(request) {
         },
         { status: 401 }
       );
+    }
 
-    // TODO: Add query params
+    const user = request.auth?.user;
     const data = await prisma.transaction.findMany({
+      ...query,
+      where: {
+        user_id: user?.role === "user" ? user?.id : undefined,
+      },
       include: {
         order: {
           select: {
@@ -181,8 +189,15 @@ export const GET = auth(async function GET(request) {
       cacheStrategy: { ttl: 60 },
     });
 
+    const totalCount = await prisma.transaction.count();
+    const totalPages = Math.ceil(totalCount / 10);
+
     return NextResponse.json({
       message: "Successfully get transactions",
+      metadata: {
+        totalCount,
+        totalPages,
+      },
       data,
     });
   } catch (error) {

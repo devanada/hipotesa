@@ -2,9 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { User } from "@prisma/client";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,34 +16,36 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { ProductExtend } from "@/lib/apis/products/type";
-
-export const columns: ColumnDef<ProductExtend>[] = [
+export const columns: ColumnDef<User>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
   {
     accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "category.name",
-    header: "Category Name",
+    accessorKey: "email",
+    header: "Email",
   },
   {
-    accessorKey: "price",
-    header: () => <div className="text-right">Price</div>,
-    cell: async ({ row }) => {
-      const price = parseFloat(row.getValue("price"));
-      const formatted = new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-      }).format(price);
+    accessorKey: "address",
+    header: "Address",
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+    cell: ({ row }) => {
+      const data = row.original;
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <Badge variant="outline">{data.role}</Badge>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const product = row.original;
+      const data = row.original;
 
       return (
         <DropdownMenu>
@@ -55,10 +59,7 @@ export const columns: ColumnDef<ProductExtend>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>See detail product</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>Edit Product</Link>
+              <Link href={`/dashboard/users/${data.id}`}>See detail user</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

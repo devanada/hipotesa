@@ -97,16 +97,6 @@ export async function GET(request: NextRequest) {
       cacheStrategy: { ttl: 60 },
     });
 
-    if (data.length === 0) {
-      return NextResponse.json(
-        {
-          message: "Get products failed, data not found",
-          reason: "There is no record on database about products",
-        },
-        { status: 404 }
-      );
-    }
-
     const totalCount = await prisma.product.count();
     const totalPages = Math.ceil(totalCount / 10);
 

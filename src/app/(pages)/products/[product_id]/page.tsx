@@ -9,6 +9,7 @@ import { badgeVariants } from "@/components/ui/badge";
 import { getProductById } from "@/lib/apis/products/api";
 import { formatCurrency } from "@/lib/functions";
 import { addItem } from "@/lib/actions/carts";
+import { auth } from "@/auth";
 
 interface Params {
   product_id: string;
@@ -20,6 +21,7 @@ export default async function Page({
   params: Params;
 }) {
   const product = await getProductById(product_id);
+  const session = await auth();
 
   async function addItemToCart() {
     "use server";
@@ -62,9 +64,11 @@ export default async function Page({
             <span className="text-2xl text-charcoal/75 dark:text-antique-white/75">
               {formatCurrency(+product.data.price)}
             </span>
-            <form action={addItemToCart}>
-              <Button size="lg">Add to Cart</Button>
-            </form>
+            {session?.user?.role === "user" ? (
+              <form action={addItemToCart}>
+                <Button size="lg">Add to Cart</Button>
+              </form>
+            ) : null}
           </div>
         </div>
       </div>
