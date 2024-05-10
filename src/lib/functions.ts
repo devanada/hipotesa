@@ -83,6 +83,7 @@ export const constructQuery = <T>(request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
   const page = searchParams.get("page");
   const category = searchParams.get("category");
+  const search = searchParams.get("search");
 
   let query = {
     take: 10,
@@ -103,6 +104,18 @@ export const constructQuery = <T>(request: NextRequest) => {
       where: {
         category: {
           name: category,
+        },
+      },
+    };
+  }
+
+  if (search) {
+    query = {
+      ...query,
+      where: {
+        name: {
+          contains: search,
+          mode: "insensitive",
         },
       },
     };

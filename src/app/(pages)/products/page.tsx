@@ -47,10 +47,16 @@ export default async function Page({
           <PaginationItem>
             <PaginationNext
               href={`?page=${+pageNumber + 1}`}
-              aria-disabled={+pageNumber === metadata.totalPages}
-              tabIndex={+pageNumber === metadata.totalPages ? -1 : undefined}
+              aria-disabled={
+                +pageNumber === metadata.totalPages || metadata.totalPages === 0
+              }
+              tabIndex={
+                +pageNumber === metadata.totalPages || metadata.totalPages === 0
+                  ? -1
+                  : undefined
+              }
               className={
-                +pageNumber === metadata.totalPages
+                +pageNumber === metadata.totalPages || metadata.totalPages === 0
                   ? "pointer-events-none opacity-50"
                   : undefined
               }

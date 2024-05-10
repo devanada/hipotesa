@@ -1,7 +1,7 @@
 export default async function Page() {
   return (
     <div>
-      <p>Dashboard</p>
+      <p>Welcome to hipotesa dashboard</p>
     </div>
   );
 }
