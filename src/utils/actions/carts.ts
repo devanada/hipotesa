@@ -3,7 +3,7 @@
 import { revalidateTag } from "next/cache";
 
 import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
-import { CartSchema } from "../types/cart";
+import { CartSchema } from "../types/carts";
 import Fetch from "@/utils/apis/fetch";
 
 export async function addItem(data: CartSchema) {

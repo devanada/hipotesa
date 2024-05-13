@@ -9,7 +9,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { CartItem as ItemType } from "@/utils/apis/carts/type";
+import { CartItem as ItemType } from "@/utils/types/carts";
 import { removeItem, editItem } from "@/utils/actions/carts";
 
 interface Props {

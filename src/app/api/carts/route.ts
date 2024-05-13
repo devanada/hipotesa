@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { CartSchema, cartSchema } from "@/utils/types/cart";
+import { CartSchema, cartSchema } from "@/utils/types/carts";
 import { isNoAuth } from "@/utils/functions";
 import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";

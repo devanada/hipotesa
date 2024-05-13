@@ -1,5 +1,5 @@
 import { IResponseSuccess } from "@/utils/types/api";
-import { CartExtend } from "@/utils/types/cart";
+import { CartExtend } from "@/utils/types/carts";
 import Fetch from "@/utils/apis/fetch";
 
 export const getCart = async (params?: any) => {
