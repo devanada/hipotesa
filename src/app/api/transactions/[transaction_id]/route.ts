@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { OrderSchema, orderSchema } from "@/lib/types/transactions";
-import { isNoAuth, nullIfError } from "@/lib/functions";
-import { NextAuthRequest } from "@/lib/types/api";
-import { snap } from "@/lib/payment";
-import { prisma } from "@/lib/db";
+import { OrderSchema, orderSchema } from "@/utils/types/transactions";
+import { NextAuthRequest } from "@/utils/types/api";
+import { isNoAuth } from "@/utils/functions";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 interface Params {

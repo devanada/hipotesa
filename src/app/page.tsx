@@ -12,8 +12,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { getProducts } from "@/lib/apis/products/api";
-import { formatCurrency } from "@/lib/functions";
+import { getProducts } from "@/utils/apis/products/api";
+import { formatCurrency } from "@/utils/functions";
 
 export default async function Page() {
   const { data: products } = await getProducts();
@@ -68,15 +68,22 @@ export default async function Page() {
                 key={product.id}
               >
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                  <Image
-                    alt={product.name}
-                    className="aspect-square overflow-hidden rounded-xl object-cover"
-                    height="300"
-                    src={product.image ?? "/placeholder.svg"}
-                    width="300"
-                  />
+                  <Link href={`/products/${product.id}`}>
+                    <Image
+                      alt={product.name}
+                      className="aspect-square overflow-hidden rounded-xl object-cover"
+                      height="300"
+                      src={product.image ?? "/placeholder.svg"}
+                      width="300"
+                    />
+                  </Link>
                   <div className="space-y-1">
-                    <h3 className="text-xl font-bold">{product.name}</h3>
+                    <Link
+                      className="text-xl font-bold"
+                      href={`/products/${product.id}`}
+                    >
+                      {product.name}
+                    </Link>
                     <p className="text-gray-500 dark:text-gray-400">
                       {formatCurrency(+product.price)}
                     </p>

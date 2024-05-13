@@ -4,9 +4,9 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { Category } from "@prisma/client";
 
-import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
-import { FormState } from "@/lib/hooks/useFormAction";
-import Fetch from "@/lib/apis/fetch";
+import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
+import { FormState } from "@/utils/hooks/use-form-action";
+import Fetch from "@/utils/apis/fetch";
 
 export async function createCategory(
   prevState: FormState,

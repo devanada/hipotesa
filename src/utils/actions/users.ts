@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 
-import { FormState } from "@/lib/hooks/useFormAction";
-import { IResponseFailed } from "@/lib/types/api";
-import Fetch from "@/lib/apis/fetch";
+import { FormState } from "@/utils/hooks/use-form-action";
+import { IResponseFailed } from "@/utils/types/api";
+import Fetch from "@/utils/apis/fetch";
 
 export async function editProfile(
   prevState: FormState,

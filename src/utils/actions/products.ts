@@ -3,10 +3,10 @@
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
-import { ProductExtend } from "@/lib/apis/products/type";
-import { FormState } from "@/lib/hooks/useFormAction";
-import Fetch from "@/lib/apis/fetch";
+import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
+import { ProductExtend } from "@/utils/types/products";
+import { FormState } from "@/utils/hooks/use-form-action";
+import Fetch from "@/utils/apis/fetch";
 
 export async function createProduct(
   prevState: FormState,

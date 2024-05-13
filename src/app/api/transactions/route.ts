@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
-import { TransactionSchema, transactionSchema } from "@/lib/types/transactions";
-import { constructQuery, isNoAuth } from "@/lib/functions";
-import { snap } from "@/lib/payment";
-import { prisma } from "@/lib/db";
+import {
+  TransactionSchema,
+  transactionSchema,
+} from "@/utils/types/transactions";
+import { constructQuery, isNoAuth } from "@/utils/functions";
+import { snap } from "@/utils/configs/payment";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {

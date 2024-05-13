@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { Product } from "@prisma/client";
 
 const MAX_MB = 2;
 const MAX_UPLOAD_SIZE = 1024 * 1024 * MAX_MB;
@@ -8,6 +9,12 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
+
+export interface ProductExtend extends Product {
+  category: {
+    name: string;
+  };
+}
 
 export const productSchema = z.object({
   name: z

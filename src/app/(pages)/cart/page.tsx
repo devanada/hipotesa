@@ -4,9 +4,9 @@ import React from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import CartItem from "@/components/cart-item";
 
-import { formatCurrency } from "@/lib/functions";
-import { getCart } from "@/lib/apis/carts/api";
-import { createTransaction } from "@/lib/actions/transactions";
+import { formatCurrency } from "@/utils/functions";
+import { getCart } from "@/utils/apis/carts/api";
+import { createTransaction } from "@/utils/actions/transactions";
 
 export default async function Page() {
   const { data } = await getCart();

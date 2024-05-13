@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
-import { productSchema } from "@/lib/types/product";
-import { constructQuery, fileUploader, isNoAuth } from "@/lib/functions";
-import { prisma } from "@/lib/db";
+import { constructQuery, fileUploader, isNoAuth } from "@/utils/functions";
+import { productSchema } from "@/utils/types/products";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {

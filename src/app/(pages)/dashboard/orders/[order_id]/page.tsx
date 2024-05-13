@@ -20,8 +20,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import DataTable from "@/components/data-table";
 
-import { getOrderById } from "@/lib/apis/orders/api";
-import { formatCurrency } from "@/lib/functions";
+import { getOrderById } from "@/utils/apis/orders/api";
+import { formatCurrency } from "@/utils/functions";
 import { columns } from "./columns";
 
 interface Params {

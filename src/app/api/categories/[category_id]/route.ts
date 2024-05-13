@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { CategorySchema, categorySchema } from "@/lib/types/categories";
-import { isNoAuth, nullIfError } from "@/lib/functions";
-import { NextAuthRequest } from "@/lib/types/api";
-import { prisma } from "@/lib/db";
+import { CategorySchema, categorySchema } from "@/utils/types/categories";
+import { isNoAuth, nullIfError } from "@/utils/functions";
+import { NextAuthRequest } from "@/utils/types/api";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 interface Params {

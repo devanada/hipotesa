@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { CartSchema, cartSchema } from "@/lib/types/cart";
-import { isNoAuth } from "@/lib/functions";
-import { prisma } from "@/lib/db";
+import { CartSchema, cartSchema } from "@/utils/types/cart";
+import { isNoAuth } from "@/utils/functions";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {

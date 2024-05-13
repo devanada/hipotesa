@@ -10,8 +10,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useFormAction } from "@/lib/hooks/useFormAction";
-import { createCategory } from "@/lib/actions/categories";
+import { useFormAction } from "@/utils/hooks/use-form-action";
+import { createCategory } from "@/utils/actions/categories";
 
 export default function Form() {
   const [errorMsg, formAction] = useFormAction(createCategory);

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { CategorySchema, categorySchema } from "@/lib/types/categories";
-import { isNoAuth } from "@/lib/functions";
-import { prisma } from "@/lib/db";
+import { CategorySchema, categorySchema } from "@/utils/types/categories";
+import { isNoAuth } from "@/utils/functions";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {

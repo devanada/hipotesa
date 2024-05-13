@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 
-import { IResponseSuccess, IResponsePagination } from "@/lib/types/api";
-import Fetch from "@/lib/apis/fetch";
+import { IResponseSuccess, IResponsePagination } from "@/utils/types/api";
+import Fetch from "@/utils/apis/fetch";
 
 export const getUsers = async (params?: any) => {
   const response = await Fetch.get<User[]>("/api/users");

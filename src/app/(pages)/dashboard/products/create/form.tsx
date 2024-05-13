@@ -23,8 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useFormAction } from "@/lib/hooks/useFormAction";
-import { createProduct } from "@/lib/actions/products";
+import { useFormAction } from "@/utils/hooks/use-form-action";
+import { createProduct } from "@/utils/actions/products";
 
 interface Props {
   categories: Category[];

@@ -12,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useFormAction } from "@/lib/hooks/useFormAction";
-import { editCategory } from "@/lib/actions/categories";
+import { useFormAction } from "@/utils/hooks/use-form-action";
+import { editCategory } from "@/utils/actions/categories";
 
 interface Props {
   data: Category;

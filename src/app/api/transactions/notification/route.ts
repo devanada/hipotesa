@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { Notification } from "@/lib/types/transactions";
-import { prisma } from "@/lib/db";
+import { Notification } from "@/utils/types/transactions";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 export const POST = auth(async function GET(request) {

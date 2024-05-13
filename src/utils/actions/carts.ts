@@ -1,11 +1,10 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { redirect } from "next/navigation";
 
-import { IResponseSuccess, IResponseFailed } from "@/lib/types/api";
+import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
 import { CartSchema } from "../types/cart";
-import Fetch from "@/lib/apis/fetch";
+import Fetch from "@/utils/apis/fetch";
 
 export async function addItem(data: CartSchema) {
   try {

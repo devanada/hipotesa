@@ -3,7 +3,11 @@ import { auth as middleware } from "@/auth";
 
 export default middleware((req) => {
   const pathname = req.nextUrl.pathname;
-  const session = !!req.cookies.get("authjs.session-token");
+  const sessionCookie =
+    process.env.NODE_ENV === "production"
+      ? "__Secure-authjs.session-token"
+      : "authjs.session-token";
+  const session = !!req.cookies.get(sessionCookie);
 
   const redirectPatterns = [
     "/dashboard/categories/:id",
@@ -12,12 +16,12 @@ export default middleware((req) => {
   ];
 
   for (const pattern of redirectPatterns) {
-    const escapedPattern = pattern.replace(":id", "\\d+");
+    const escapedPattern = pattern.replace(":id", "[a-zA-Z0-9_]+");
     const regex = new RegExp(`^${escapedPattern}$`);
 
     if (pathname.match(regex)) {
       const url = req.nextUrl.clone();
-      url.pathname = pathname.replace(/\/\d+$/, "");
+      url.pathname = pathname.replace(/\/[a-zA-Z0-9_]+$/, "");
 
       return NextResponse.redirect(url, 308);
     }

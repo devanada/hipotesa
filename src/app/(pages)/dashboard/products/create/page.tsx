@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Form from "./form";
 
-import { getCategories } from "@/lib/apis/categories/api";
+import { getCategories } from "@/utils/apis/categories/api";
 
 export default async function Page() {
   const { data: categories } = await getCategories();

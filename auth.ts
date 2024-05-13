@@ -7,8 +7,8 @@ import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
 import NextAuth from "next-auth";
 
-import { Roles } from "@/lib/types/users";
-import { prisma } from "@/lib/db";
+import { Roles } from "@/utils/types/users";
+import { prisma } from "@/utils/configs/db";
 
 const providers: Provider[] = [
   Google({ allowDangerousEmailAccountLinking: true }),

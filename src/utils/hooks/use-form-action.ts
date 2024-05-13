@@ -2,7 +2,7 @@ import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { IResponseFailed } from "@/lib/types/api";
+import { IResponseFailed } from "@/utils/types/api";
 
 export type FormState = {
   message: string;

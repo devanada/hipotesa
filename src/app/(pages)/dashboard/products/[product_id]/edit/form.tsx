@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useFormAction } from "@/lib/hooks/useFormAction";
-import { ProductExtend } from "@/lib/apis/products/type";
-import { createProduct } from "@/lib/actions/products";
+import { useFormAction } from "@/utils/hooks/use-form-action";
+import { ProductExtend } from "@/utils/types/products";
+import { createProduct } from "@/utils/actions/products";
 
 interface Props {
   data: ProductExtend;

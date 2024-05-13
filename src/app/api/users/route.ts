@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
-import { UserSchema, userBaseSchema, userSchema } from "@/lib/types/users";
-import { constructQuery, fileUploader, isNoAuth } from "@/lib/functions";
-import { prisma } from "@/lib/db";
+import { UserSchema, userBaseSchema, userSchema } from "@/utils/types/users";
+import { constructQuery, fileUploader, isNoAuth } from "@/utils/functions";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 interface DataToUpdate {

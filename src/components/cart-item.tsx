@@ -9,8 +9,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { CartItem as ItemType } from "@/lib/apis/carts/type";
-import { removeItem, editItem } from "@/lib/actions/carts";
+import { CartItem as ItemType } from "@/utils/apis/carts/type";
+import { removeItem, editItem } from "@/utils/actions/carts";
 
 interface Props {
   data: ItemType;

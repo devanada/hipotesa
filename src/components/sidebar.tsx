@@ -1,11 +1,4 @@
-import {
-  Home,
-  Package,
-  Settings,
-  ShoppingCart,
-  Users2,
-  Tags,
-} from "lucide-react";
+import { Home, Package, ShoppingCart, Users2, Tags } from "lucide-react";
 
 import {
   Tooltip,

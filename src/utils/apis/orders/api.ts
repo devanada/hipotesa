@@ -1,6 +1,6 @@
-import { IResponseSuccess, IResponsePagination } from "@/lib/types/api";
-import Fetch from "@/lib/apis/fetch";
-import { OrderExtend } from "./type";
+import { IResponseSuccess, IResponsePagination } from "@/utils/types/api";
+import { OrderExtend } from "@/utils/types/transactions";
+import Fetch from "@/utils/apis/fetch";
 
 export const getOrders = async (params?: any) => {
   const response = await Fetch.get<OrderExtend[]>("/api/transactions");

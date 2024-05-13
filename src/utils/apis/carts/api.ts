@@ -1,6 +1,6 @@
-import { IResponseSuccess } from "@/lib/types/api";
-import Fetch from "@/lib/apis/fetch";
-import { CartExtend } from "./type";
+import { IResponseSuccess } from "@/utils/types/api";
+import { CartExtend } from "@/utils/types/cart";
+import Fetch from "@/utils/apis/fetch";
 
 export const getCart = async (params?: any) => {
   const response = await Fetch.get<CartExtend>("/api/carts");

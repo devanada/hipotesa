@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { Session } from "next-auth";
 
-import { cloudinaryConfig } from "@/lib/storage";
+import { cloudinaryConfig } from "@/utils/configs/storage";
 
 type AnyFunction = (...args: any[]) => any;
 type Options = {

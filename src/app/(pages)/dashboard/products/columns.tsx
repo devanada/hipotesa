@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { ProductExtend } from "@/lib/apis/products/type";
+import { ProductExtend } from "@/utils/types/products";
 
 export const columns: ColumnDef<ProductExtend>[] = [
   {

@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { getOrders } from "@/lib/apis/orders/api";
+import { getOrders } from "@/utils/apis/orders/api";
 import { columns } from "./columns";
 
 export default async function Page({

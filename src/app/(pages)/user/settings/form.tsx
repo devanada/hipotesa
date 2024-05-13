@@ -6,8 +6,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useFormAction } from "@/lib/hooks/useFormAction";
-import { editProfile } from "@/lib/actions/users";
+import { useFormAction } from "@/utils/hooks/use-form-action";
+import { editProfile } from "@/utils/actions/users";
 
 interface Props {
   data?: User;

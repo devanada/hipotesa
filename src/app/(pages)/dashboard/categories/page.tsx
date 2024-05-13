@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import DataTable from "@/components/data-table";
 
-import { getCategories } from "@/lib/apis/categories/api";
+import { getCategories } from "@/utils/apis/categories/api";
 import { columns } from "./columns";
 
 export default async function Page() {

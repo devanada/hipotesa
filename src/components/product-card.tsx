@@ -3,7 +3,7 @@ import { UrlObject } from "url";
 import Image from "next/image";
 import Link from "next/link";
 
-import { formatCurrency } from "@/lib/functions";
+import { formatCurrency } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {

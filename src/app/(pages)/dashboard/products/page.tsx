@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { getProducts } from "@/lib/apis/products/api";
+import { getProducts } from "@/utils/apis/products/api";
 import { columns } from "./columns";
 
 export default async function Page({

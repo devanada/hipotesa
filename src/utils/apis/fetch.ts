@@ -44,6 +44,7 @@ async function request<TResponse>(
     if (["GET", "DELETE"].includes(method)) {
       url += "?" + objectToQueryString(params as { [key: string]: string });
       options.next = { revalidate: 0 };
+      // TODO: Add cache tagging system
     } else {
       if (params instanceof FormData) {
         options.body = params;

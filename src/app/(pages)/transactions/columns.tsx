@@ -1,31 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { toast } from "sonner";
-import Link from "next/link";
 import dayjs from "dayjs";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { OrderExtend } from "@/lib/apis/orders/type";
-import { OrderStatus } from "@prisma/client";
-import { editTransaction } from "@/lib/actions/transactions";
+import { OrderExtend } from "@/utils/types/transactions";
 
 export const columns: ColumnDef<OrderExtend>[] = [
   {

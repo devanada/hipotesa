@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 
-import { OrderItem } from "@/lib/apis/orders/type";
+import { OrderItem } from "@/utils/apis/orders/type";
 
 export const columns: ColumnDef<OrderItem>[] = [
   {

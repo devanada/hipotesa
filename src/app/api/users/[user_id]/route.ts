@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { userSchema } from "@/lib/types/users";
-import { fileUploader, isNoAuth, nullIfError } from "@/lib/functions";
-import { NextAuthRequest } from "@/lib/types/api";
-import { prisma } from "@/lib/db";
+import { fileUploader, isNoAuth, nullIfError } from "@/utils/functions";
+import { NextAuthRequest } from "@/utils/types/api";
+import { userSchema } from "@/utils/types/users";
+import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
 interface Params {
