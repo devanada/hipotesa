@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 
 export const POST = auth(async function POST(request) {
   try {
-    if (isNoAuth(request.auth))
+    if (isNoAuth(request.auth)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -15,6 +15,7 @@ export const POST = auth(async function POST(request) {
         },
         { status: 401 }
       );
+    }
 
     const { product_id, quantity } = (await request.json()) as CartSchema;
     const userId = request.auth?.user?.id!;
@@ -76,7 +77,7 @@ export const POST = auth(async function POST(request) {
 
 export const GET = auth(async function GET(request) {
   try {
-    if (isNoAuth(request.auth))
+    if (isNoAuth(request.auth)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -84,6 +85,7 @@ export const GET = auth(async function GET(request) {
         },
         { status: 401 }
       );
+    }
 
     const data = await prisma.cart.upsert({
       where: {

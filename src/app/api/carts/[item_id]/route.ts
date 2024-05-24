@@ -13,7 +13,7 @@ interface Params {
 export async function PUT(request: NextAuthRequest, context: Params) {
   return auth(async () => {
     try {
-      if (isNoAuth(request.auth))
+      if (isNoAuth(request.auth)) {
         return NextResponse.json(
           {
             message: "You need to signin to access this endpoint",
@@ -21,6 +21,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
           },
           { status: 401 }
         );
+      }
 
       const { quantity } = (await request.json()) as CartSchema;
       const { item_id } = context.params;
@@ -49,7 +50,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
       if (!data) {
         return NextResponse.json(
           {
-            message: "Edit item failed, data not found",
+            message: "Update item failed, data not found",
             reason:
               "The item you're trying to update might not have been created yet",
           },
@@ -78,7 +79,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
 export async function DELETE(request: NextAuthRequest, context: Params) {
   return auth(async () => {
     try {
-      if (isNoAuth(request.auth))
+      if (isNoAuth(request.auth)) {
         return NextResponse.json(
           {
             message: "You need to signin to access this endpoint",
@@ -86,6 +87,7 @@ export async function DELETE(request: NextAuthRequest, context: Params) {
           },
           { status: 401 }
         );
+      }
 
       const { item_id } = context.params;
 
@@ -108,7 +110,7 @@ export async function DELETE(request: NextAuthRequest, context: Params) {
 
       return NextResponse.json({
         message: "Successfully deleted item from cart",
-        data,
+        data: null,
       });
     } catch (error) {
       console.log(error);

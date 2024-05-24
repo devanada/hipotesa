@@ -19,7 +19,7 @@ export default middleware((req) => {
     const escapedPattern = pattern.replace(":id", "[a-zA-Z0-9_]+");
     const regex = new RegExp(`^${escapedPattern}$`);
 
-    if (pathname.match(regex)) {
+    if (pathname.match(regex) && !pathname.endsWith("/create")) {
       const url = req.nextUrl.clone();
       url.pathname = pathname.replace(/\/[a-zA-Z0-9_]+$/, "");
 
@@ -37,5 +37,5 @@ export default middleware((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/user/:path*"],
+  matcher: ["/dashboard/:path*", "/user/:path*", "/transactions"],
 };

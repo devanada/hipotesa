@@ -1,14 +1,14 @@
-import { redirect } from "next/navigation";
 import { TagIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import { getProductById } from "@/utils/apis/products/api";
+import { getProductById } from "@/utils/apis/products";
+import { handleAddItem } from "@/utils/actions/carts";
 import { formatCurrency } from "@/utils/functions";
-import { addItem } from "@/utils/actions/carts";
 import { auth } from "@/auth";
 
 interface Params {
@@ -22,19 +22,6 @@ export default async function Page({
 }) {
   const product = await getProductById(product_id);
   const session = await auth();
-
-  async function addItemToCart() {
-    "use server";
-
-    const payload = {
-      product_id,
-      quantity: 1,
-    };
-
-    addItem(payload);
-
-    redirect("/cart");
-  }
 
   return (
     <div className="w-full h-full grid md:grid-cols-2 gap-8 max-w-6xl mx-auto py-12 px-4 md:px-0 overflow-auto">
@@ -65,8 +52,15 @@ export default async function Page({
               {formatCurrency(+product.data.price)}
             </span>
             {session?.user?.role === "user" ? (
-              <form action={addItemToCart}>
-                <Button size="lg">Add to Cart</Button>
+              <form action={handleAddItem}>
+                <Input
+                  type="hidden"
+                  name="product_id"
+                  value={product.data.id}
+                />
+                <Button type="submit" size="lg">
+                  Add to Cart
+                </Button>
               </form>
             ) : null}
           </div>

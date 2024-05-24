@@ -4,7 +4,9 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Form from "./form";
 
-import { getCategoryById } from "@/utils/apis/categories/api";
+import { getCategoryById } from "@/utils/apis/categories";
+import AlertDialog from "@/components/alert-dialog";
+import { handleRemoveCategory } from "@/utils/actions/categories";
 
 export default async function Page({
   params,
@@ -12,6 +14,10 @@ export default async function Page({
   params: { category_id: string };
 }) {
   const { data } = await getCategoryById(params.category_id);
+  const removeCategoryById = handleRemoveCategory.bind(
+    null,
+    params.category_id
+  );
 
   return (
     <main className="w-full grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -32,9 +38,19 @@ export default async function Page({
             Create a Category
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
-            <Button variant="outline" size="sm" type="reset" form="create-form">
-              Discard
-            </Button>
+            <AlertDialog
+              message="This action cannot be undone. This will permanently remove your data from the servers."
+              action={removeCategoryById}
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                type="reset"
+                form="create-form"
+              >
+                Discard
+              </Button>
+            </AlertDialog>
             <Button size="sm" type="submit" form="create-form">
               Save Category
             </Button>

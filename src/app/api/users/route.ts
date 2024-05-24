@@ -70,7 +70,7 @@ export const GET = auth(async function GET(request) {
   try {
     let query = constructQuery<Prisma.UserFindManyArgs>(request);
 
-    if (isNoAuth(request.auth, true))
+    if (isNoAuth(request.auth, true)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -78,6 +78,7 @@ export const GET = auth(async function GET(request) {
         },
         { status: 401 }
       );
+    }
 
     const data = await prisma.user.findMany({
       ...query,
@@ -108,9 +109,9 @@ export const GET = auth(async function GET(request) {
   }
 });
 
-export const PUT = auth(async function POST(request) {
+export const PUT = auth(async function PUT(request) {
   try {
-    if (isNoAuth(request.auth))
+    if (isNoAuth(request.auth)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -118,6 +119,7 @@ export const PUT = auth(async function POST(request) {
         },
         { status: 401 }
       );
+    }
 
     const formData = await request.formData();
 

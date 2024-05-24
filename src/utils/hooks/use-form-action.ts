@@ -4,18 +4,16 @@ import { toast } from "sonner";
 
 import { IResponseFailed } from "@/utils/types/api";
 
-export type FormState = {
-  message: string;
-  reason: string;
-};
-
-const initialState: FormState = {
+const initialState: IResponseFailed = {
   message: "",
-  reason: "",
+  reason: undefined,
 };
 
 export function useFormAction(
-  props: (prevState: FormState, formData: FormData) => Promise<IResponseFailed>
+  props: (
+    prevState: IResponseFailed,
+    formData: FormData
+  ) => Promise<IResponseFailed>
 ): [state: Awaited<IResponseFailed>, dispatch: (payload: FormData) => void] {
   const [state, formAction] = useFormState(props, initialState);
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { Input, InputMessage } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -7,14 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { useFormAction } from "@/utils/hooks/use-form-action";
-import { createCategory } from "@/utils/actions/categories";
+import { handleAddCategory } from "@/utils/actions/categories";
 
 export default function Form() {
-  const [errorMsg, formAction] = useFormAction(createCategory);
+  const [errorMsg, formAction] = useFormAction(handleAddCategory);
 
   return (
     <form
@@ -40,7 +40,9 @@ export default function Form() {
                   type="text"
                   className="w-full"
                   placeholder="Power Supply"
+                  defaultValue=""
                 />
+                <InputMessage message={errorMsg.reason?.["name"]} />
               </div>
             </div>
           </CardContent>

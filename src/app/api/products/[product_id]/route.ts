@@ -64,7 +64,7 @@ export async function GET(request: Request, { params }: Params) {
 export async function PUT(request: NextAuthRequest, context: Params) {
   return auth(async () => {
     try {
-      if (isNoAuth(request.auth, true))
+      if (isNoAuth(request.auth, true)) {
         return NextResponse.json(
           {
             message: "You need to signin to access this endpoint",
@@ -72,6 +72,7 @@ export async function PUT(request: NextAuthRequest, context: Params) {
           },
           { status: 401 }
         );
+      }
 
       const { product_id } = context.params;
       const formData = await request.formData();

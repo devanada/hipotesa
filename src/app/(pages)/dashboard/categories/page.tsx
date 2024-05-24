@@ -2,11 +2,10 @@ import { Suspense } from "react";
 
 import DataTable from "@/components/data-table";
 
-import { getCategories } from "@/utils/apis/categories/api";
+import { getCategories } from "@/utils/apis/categories";
 import { columns } from "./columns";
 
 export default async function Page() {
-  // TODO: The data not getting a new one after create or update
   const { data } = await getCategories();
 
   return (

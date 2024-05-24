@@ -14,7 +14,7 @@ export const POST = auth(async function POST(request) {
   let transactionId = "";
 
   try {
-    if (isNoAuth(request.auth))
+    if (isNoAuth(request.auth)) {
       return NextResponse.json(
         {
           message: "You need to signin to access this endpoint",
@@ -22,6 +22,7 @@ export const POST = auth(async function POST(request) {
         },
         { status: 401 }
       );
+    }
 
     const { amount, cart_id } = (await request.json()) as TransactionSchema;
     const { name, email, id, address } = request.auth?.user!;

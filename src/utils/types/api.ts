@@ -1,25 +1,24 @@
 import { NextRequest } from "next/server";
 import { Session } from "next-auth";
 
-export interface IResponseSuccess<TData = any> {
+export interface IResponseSuccess<TData> {
   message: string;
   data: TData;
-}
-
-export interface IResponsePagination<TData = any> {
-  message: string;
-  metadata: {
+  metadata?: {
     totalCount: number;
     totalPages: number;
   };
-  data: TData;
 }
 
-export interface IResponseFailed {
-  message: string;
-  reason: string;
+export interface IResponseFailed
+  extends Pick<IResponseSuccess<never>, "message"> {
+  reason?: Record<string, string[]> & string;
 }
 
 export interface NextAuthRequest extends NextRequest {
   auth: Session | null;
+}
+
+export interface SearchParams {
+  [key: string]: string | string[] | undefined;
 }

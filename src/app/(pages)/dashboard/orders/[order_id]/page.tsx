@@ -20,7 +20,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import DataTable from "@/components/data-table";
 
-import { getOrderById } from "@/utils/apis/orders/api";
+import { getTransactionById } from "@/utils/apis/transactions";
 import { formatCurrency } from "@/utils/functions";
 import { columns } from "./columns";
 
@@ -33,7 +33,7 @@ export default async function Page({
 }: {
   params: Params;
 }) {
-  const { data } = await getOrderById(order_id);
+  const { data } = await getTransactionById(order_id);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0">

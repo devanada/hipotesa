@@ -2,20 +2,20 @@
 
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { Category } from "@prisma/client";
 
-import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
-import { FormState } from "@/utils/hooks/use-form-action";
-import Fetch from "@/utils/apis/fetch";
+import { addCategory, editCategory, removeCategory } from "../apis/categories";
+import { IResponseFailed } from "@/utils/types/api";
 
-export async function createCategory(
-  prevState: FormState,
+export async function handleAddCategory(
+  prevState: IResponseFailed,
   formData: FormData
-): Promise<IResponseFailed> {
+) {
   try {
-    const body = Object.fromEntries(formData.entries());
+    const payload = {
+      name: formData.get("name") as string,
+    };
 
-    await Fetch.create<Category>("/api/categories", body);
+    await addCategory(payload);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -29,15 +29,33 @@ export async function createCategory(
   redirect("/dashboard/categories");
 }
 
-export async function editCategory(
-  categoryId: number,
-  prevState: FormState,
+export async function handleEditCategory(
+  categoryId: string,
+  prevState: IResponseFailed,
   formData: FormData
 ): Promise<IResponseFailed> {
   try {
-    const body = Object.fromEntries(formData.entries());
+    const payload = {
+      name: formData.get("name") as string,
+    };
 
-    await Fetch.update<Category>(`/api/categories/${categoryId}`, body);
+    await editCategory(categoryId, payload);
+  } catch (error) {
+    const { message, reason } = error as IResponseFailed;
+
+    return {
+      message: message,
+      reason: reason,
+    };
+  }
+
+  revalidateTag("categories");
+  redirect("/dashboard/categories");
+}
+
+export async function handleRemoveCategory(categoryId: string) {
+  try {
+    await removeCategory(categoryId);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 

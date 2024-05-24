@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { editTransaction } from "@/utils/actions/transactions";
+import { handleEditTransaction } from "@/utils/actions/transactions";
 import { OrderExtend } from "@/utils/types/transactions";
 
 export const columns: ColumnDef<OrderExtend>[] = [
@@ -59,7 +59,7 @@ export const columns: ColumnDef<OrderExtend>[] = [
         <Select
           defaultValue={data.order.status}
           onValueChange={async (val) => {
-            const result = await editTransaction(data.id, {
+            const result = await handleEditTransaction(data.id, {
               status: val as keyof typeof OrderStatus,
             });
 

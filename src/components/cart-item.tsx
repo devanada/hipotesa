@@ -9,8 +9,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { handleEditItem, handleRemoveItem } from "@/utils/actions/carts";
 import { CartItem as ItemType } from "@/utils/types/carts";
-import { removeItem, editItem } from "@/utils/actions/carts";
 
 interface Props {
   data: ItemType;
@@ -18,7 +18,7 @@ interface Props {
 
 const CartItem = ({ data }: Props) => {
   const getSuggestions = useCallback(async function (quantity: number) {
-    const result = await editItem(String(data.id), { quantity });
+    const result = await handleEditItem(String(data.id), { quantity });
 
     if (result?.reason) {
       toast.error(result.message, {
@@ -28,7 +28,7 @@ const CartItem = ({ data }: Props) => {
   }, []);
 
   const getSuggestionsDebounce = useMemo(
-    () => debounce(getSuggestions, 500),
+    () => debounce(getSuggestions, 1000),
     [getSuggestions]
   );
 
@@ -61,7 +61,7 @@ const CartItem = ({ data }: Props) => {
             size="icon"
             variant="outline"
             onClick={async () => {
-              const result = await removeItem(String(data.id));
+              const result = await handleRemoveItem(String(data.id));
 
               if (result?.reason) {
                 toast.error(result.message, {

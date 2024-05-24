@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-import { getProducts } from "@/utils/apis/products/api";
+import { getProducts } from "@/utils/apis/products";
 import { formatCurrency } from "@/utils/functions";
 
 export default async function Page() {

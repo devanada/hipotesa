@@ -3,9 +3,9 @@ import Link from "next/link";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
+import { ModeToggle } from "./mode-toggle";
 
 import { auth } from "@/auth";
-import { ModeToggle } from "./mode-toggle";
 
 export default async function Page() {
   const session = await auth();

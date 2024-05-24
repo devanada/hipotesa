@@ -2,13 +2,23 @@
 
 import { revalidateTag } from "next/cache";
 
-import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
+import { IResponseFailed } from "@/utils/types/api";
 import { CartSchema } from "../types/carts";
-import Fetch from "@/utils/apis/fetch";
+import {
+  addItemToCart,
+  editItemOnCart,
+  removeItemFromCart,
+} from "../apis/carts";
+import { redirect } from "next/navigation";
 
-export async function addItem(data: CartSchema) {
+export async function handleAddItem(formData: FormData) {
   try {
-    await Fetch.create("/api/carts", data);
+    const payload = {
+      product_id: formData.get("product_id") as string,
+      quantity: 1,
+    };
+
+    await addItemToCart(payload);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -18,13 +28,13 @@ export async function addItem(data: CartSchema) {
     };
   }
 
-  revalidateTag("transactions");
   revalidateTag("cart");
+  redirect("/cart");
 }
 
-export async function editItem(item_id: string, data: CartSchema) {
+export async function handleEditItem(itemId: string, data: CartSchema) {
   try {
-    await Fetch.update(`/api/carts/${item_id}`, data);
+    await editItemOnCart(itemId, data);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -34,13 +44,12 @@ export async function editItem(item_id: string, data: CartSchema) {
     };
   }
 
-  revalidateTag("transactions");
   revalidateTag("cart");
 }
 
-export async function removeItem(item_id: string) {
+export async function handleRemoveItem(itemId: string) {
   try {
-    await Fetch.remove(`/api/carts/${item_id}`);
+    await removeItemFromCart(itemId);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 

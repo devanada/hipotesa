@@ -22,4 +22,36 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = "Input";
 
-export { Input };
+export interface InputMessageProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {
+  message?: string[];
+}
+
+const InputMessage = React.forwardRef<HTMLParagraphElement, InputMessageProps>(
+  ({ className, children, message = [], ...props }, ref) => {
+    if (message.length === 0) {
+      return null;
+    }
+
+    return (
+      <>
+        {message.map((text) => (
+          <p
+            ref={ref}
+            key={text}
+            className={cn(
+              "text-[0.8rem] font-medium text-destructive",
+              className
+            )}
+            {...props}
+          >
+            {text}
+          </p>
+        ))}
+      </>
+    );
+  }
+);
+InputMessage.displayName = "InputMessage";
+
+export { Input, InputMessage };

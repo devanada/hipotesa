@@ -4,9 +4,9 @@ import React from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import CartItem from "@/components/cart-item";
 
+import { handleCreateTransaction } from "@/utils/actions/transactions";
 import { formatCurrency } from "@/utils/functions";
-import { getCart } from "@/utils/apis/carts/api";
-import { createTransaction } from "@/utils/actions/transactions";
+import { getCart } from "@/utils/apis/carts";
 
 export default async function Page() {
   const { data } = await getCart();
@@ -49,7 +49,7 @@ export default async function Page() {
             >
               Continue Shopping
             </Link>
-            <form className="flex-1" action={createTransaction}>
+            <form className="flex-1" action={handleCreateTransaction}>
               <Button className="w-full">Proceed to Checkout</Button>
               <input type="hidden" name="amount" value={calculateTotal()} />
               <input type="hidden" name="cart_id" value={data.id} />

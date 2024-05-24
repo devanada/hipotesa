@@ -7,12 +7,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { getProducts } from "@/utils/apis/products/api";
+import { getProducts } from "@/utils/apis/products";
+import { SearchParams } from "@/utils/types/api";
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }) {
   const { data, metadata } = await getProducts(searchParams);
   const pageNumber = searchParams["page"] ?? "1";
@@ -48,15 +49,18 @@ export default async function Page({
             <PaginationNext
               href={`?page=${+pageNumber + 1}`}
               aria-disabled={
-                +pageNumber === metadata.totalPages || metadata.totalPages === 0
+                +pageNumber === metadata?.totalPages ||
+                metadata?.totalPages === 0
               }
               tabIndex={
-                +pageNumber === metadata.totalPages || metadata.totalPages === 0
+                +pageNumber === metadata?.totalPages ||
+                metadata?.totalPages === 0
                   ? -1
                   : undefined
               }
               className={
-                +pageNumber === metadata.totalPages || metadata.totalPages === 0
+                +pageNumber === metadata?.totalPages ||
+                metadata?.totalPages === 0
                   ? "pointer-events-none opacity-50"
                   : undefined
               }

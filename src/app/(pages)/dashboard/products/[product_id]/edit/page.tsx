@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Form from "./form";
 
-import { getCategories } from "@/utils/apis/categories/api";
-import { getProductById } from "@/utils/apis/products/api";
+import { getCategories } from "@/utils/apis/categories";
+import { getProductById } from "@/utils/apis/products";
 
 export default async function Page({
   params,

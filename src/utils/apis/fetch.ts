@@ -1,62 +1,43 @@
 import { cookies } from "next/headers";
-import { IResponseSuccess, IResponseFailed } from "../types/api";
 
-const _apiHost = process.env.BASE_URL;
+import { IResponseSuccess, IResponseFailed, SearchParams } from "../types/api";
 
-type Params =
-  | FormData
-  | {
-      [key: string]: FormDataEntryValue | string | number;
-    };
+const BASE_URL = process.env.BASE_URL;
+const SESSION_NAME =
+  process.env.NODE_ENV === "production"
+    ? "__Secure-authjs.session-token"
+    : "authjs.session-token";
 
-function request<TResponse>(
-  url: string,
-  method: "POST" | "PUT",
-  params: Params
-): Promise<any>;
-function request<TResponse>(
-  url: string,
-  method: "GET" | "DELETE",
-  params?: Params
-): Promise<any>;
+interface RequestOptions extends RequestInit {
+  query?: SearchParams;
+}
+
 async function request<TResponse>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
-  params?: Params
+  requestOptions?: RequestOptions
 ) {
-  const sessionCookie =
-    process.env.NODE_ENV === "production"
-      ? "__Secure-authjs.session-token"
-      : "authjs.session-token";
-  const options: RequestInit = {
-    method,
-    headers: {
-      Cookie: `${sessionCookie}=${
-        cookies().get(`${sessionCookie}`)?.value ?? ""
-      }`,
-    },
-  };
-  const headers = options?.headers
-    ? new Headers(options.headers)
-    : new Headers();
-
-  if (params) {
-    if (["GET", "DELETE"].includes(method)) {
-      url += "?" + objectToQueryString(params as { [key: string]: string });
-      options.next = { revalidate: 0 };
-      // TODO: Add cache tagging system
-    } else {
-      if (params instanceof FormData) {
-        options.body = params;
-      } else {
-        options.body = JSON.stringify(params);
-        headers.set("Content-Type", "application/json");
-      }
-    }
-  }
-
   try {
-    const response = await fetch(_apiHost + url, options);
+    const options: RequestInit = {
+      ...requestOptions,
+      method,
+      headers: {
+        Cookie: `${SESSION_NAME}=${
+          cookies().get(`${SESSION_NAME}`)?.value ?? ""
+        }`,
+      },
+    };
+    const headers = new Headers(options.headers);
+
+    if (requestOptions?.query) {
+      url += "?" + objectToQueryString(requestOptions?.query);
+    }
+    if (requestOptions?.body && !(requestOptions.body instanceof FormData)) {
+      headers.set("Content-Type", "application/json");
+    }
+
+    const response = await fetch(BASE_URL + url, options);
+
     if (response.ok) {
       return (await response.json()) as IResponseSuccess<TResponse>;
     }
@@ -67,31 +48,19 @@ async function request<TResponse>(
   }
 }
 
-function objectToQueryString(obj: { [key: string]: string }) {
+function objectToQueryString(obj: SearchParams) {
   return Object.keys(obj)
     .map((key) => key + "=" + obj[key])
     .join("&");
 }
 
-function get<TResponse>(url: string, params?: Params) {
-  return request<TResponse>(url, "GET", params);
-}
-
-function create<TResponse>(url: string, params: Params) {
-  return request<TResponse>(url, "POST", params);
-}
-
-function update<TResponse>(url: string, params: Params) {
-  return request<TResponse>(url, "PUT", params);
-}
-
-function remove<TResponse>(url: string, params?: Params) {
-  return request<TResponse>(url, "DELETE", params);
-}
-
 export default {
-  get,
-  create,
-  update,
-  remove,
+  get: <TResponse>(url: string, params?: RequestOptions) =>
+    request<TResponse>(url, "GET", params),
+  create: <TResponse>(url: string, params?: RequestOptions) =>
+    request<TResponse>(url, "POST", params),
+  update: <TResponse>(url: string, params?: RequestOptions) =>
+    request<TResponse>(url, "PUT", params),
+  remove: <TResponse>(url: string, params?: RequestOptions) =>
+    request<TResponse>(url, "DELETE", params),
 };

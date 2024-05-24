@@ -2,6 +2,8 @@
 
 import { Category } from "@prisma/client";
 
+import { Input, InputMessage } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -9,18 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { useFormAction } from "@/utils/hooks/use-form-action";
-import { editCategory } from "@/utils/actions/categories";
+import { handleEditCategory } from "@/utils/actions/categories";
 
 interface Props {
   data: Category;
 }
 
 export default function Form(props: Props) {
-  const formActionWithId = editCategory.bind(null, props.data.id);
+  const formActionWithId = handleEditCategory.bind(null, String(props.data.id));
   const [errorMsg, formAction] = useFormAction(formActionWithId);
 
   return (
@@ -49,6 +49,7 @@ export default function Form(props: Props) {
                   placeholder="Power Supply"
                   defaultValue={props.data.name}
                 />
+                <InputMessage message={errorMsg.reason?.["name"]} />
               </div>
             </div>
           </CardContent>
