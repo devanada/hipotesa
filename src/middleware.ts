@@ -12,7 +12,6 @@ export default middleware((req) => {
   const redirectPatterns = [
     "/dashboard/categories/:id",
     "/dashboard/products/:id",
-    "/dashboard/users/:id",
   ];
 
   for (const pattern of redirectPatterns) {

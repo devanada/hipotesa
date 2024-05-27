@@ -13,3 +13,22 @@ export const getProductById = async (path: string) => {
   const response = await Fetch.get<ProductExtend>(`/api/products/${path}`);
   return response;
 };
+
+export const addProduct = async (data: FormData) => {
+  const response = await Fetch.create<null>("/api/products", {
+    body: data,
+  });
+  return response;
+};
+
+export const editProduct = async (path: string, data: FormData) => {
+  const response = await Fetch.update<null>(`/api/products/${path}`, {
+    body: data,
+  });
+  return response;
+};
+
+export const removeProduct = async (path: string) => {
+  const response = await Fetch.remove<null>(`/api/products/${path}`);
+  return response;
+};

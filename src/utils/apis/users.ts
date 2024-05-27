@@ -12,3 +12,10 @@ export const getUserById = async (path: string) => {
   const response = await Fetch.get<User>(`/api/users/${path}`);
   return response;
 };
+
+export const editProfile = async (data: FormData) => {
+  const response = await Fetch.update<null>("/api/users", {
+    body: data,
+  });
+  return response;
+};

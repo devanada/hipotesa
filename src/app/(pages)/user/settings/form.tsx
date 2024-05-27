@@ -7,14 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { useFormAction } from "@/utils/hooks/use-form-action";
-import { editProfile } from "@/utils/actions/users";
+import { handleEditProfile } from "@/utils/actions/users";
 
 interface Props {
   data?: User;
 }
 
 export default function Form({ data }: Props) {
-  const [errorMsg, formAction] = useFormAction(editProfile);
+  const [errorMsg, formAction] = useFormAction(handleEditProfile);
 
   return (
     <form className="grid gap-4" id="edit-form" action={formAction}>
