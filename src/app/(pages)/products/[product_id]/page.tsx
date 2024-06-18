@@ -25,14 +25,14 @@ export default async function Page({
 
   return (
     <div className="w-full h-full grid md:grid-cols-2 gap-8 max-w-6xl mx-auto py-12 px-4 md:px-0 overflow-auto">
-      <div className="grid gap-6">
+      <div className="grid gap-6 justify-items-center">
         <Image
           src={product.data.image ?? ""}
           alt={product.data.name}
-          width={600}
-          height={600}
+          width={450}
+          height={450}
           priority
-          className="rounded-lg object-contain w-full aspect-square"
+          className="rounded-lg overflow-hidden aspect-square object-cover"
         />
         <div className="grid gap-2">
           <div className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">

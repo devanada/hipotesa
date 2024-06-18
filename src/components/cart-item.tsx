@@ -28,7 +28,7 @@ const CartItem = ({ data }: Props) => {
   }, []);
 
   const getSuggestionsDebounce = useMemo(
-    () => debounce(getSuggestions, 1000),
+    () => debounce(getSuggestions, 500),
     [getSuggestions]
   );
 

@@ -45,7 +45,7 @@ export default async function Page() {
               </Link>
             </div>
           </div>
-          <img
+          <Image
             alt="Hero"
             className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
             height="550"
