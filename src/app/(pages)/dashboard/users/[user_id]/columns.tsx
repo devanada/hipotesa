@@ -2,11 +2,10 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { User } from "@prisma/client";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,34 +15,41 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const columns: ColumnDef<User>[] = [
+import { OrderExtend } from "@/utils/types/transactions";
+
+export const columns: ColumnDef<OrderExtend>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "order.id",
+    header: "Order ID",
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "amount",
+    header: () => <div className="text-right">Total</div>,
+    cell: async ({ row }) => {
+      const price = parseFloat(row.getValue("amount"));
+      const formatted = new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(price);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "status",
+    header: "Status",
   },
   {
-    accessorKey: "address",
-    header: "Address",
+    accessorKey: "order.status",
+    header: "Order Status",
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "created_at",
+    header: "Date",
     cell: ({ row }) => {
       const data = row.original;
 
-      return (
-        <Badge variant="outline" className="capitalize">
-          {data.role}
-        </Badge>
-      );
+      return dayjs(data.created_at).format("DD MMM YYYY");
     },
   },
   {
@@ -63,7 +69,9 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/users/${data.id}`}>See detail user</Link>
+              <Link href={`/dashboard/orders/${data.id}`}>
+                See detail order
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

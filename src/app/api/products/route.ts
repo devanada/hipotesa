@@ -106,8 +106,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       message: "Successfully get products",
       metadata: {
-        totalCount,
-        totalPages,
+        total_count: totalCount,
+        total_pages: totalPages,
       },
       data,
     });

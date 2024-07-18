@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +13,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { auth, signIn, signOut } from "@/auth";
+import { getCart } from "@/utils/apis/carts";
+
+async function getCartLength() {
+  const session = await auth();
+
+  if (session) {
+    const { data } = await getCart();
+
+    return data.cart_items.length;
+  }
+
+  return null;
+}
 
 const Navbar = async () => {
+  const totalItems = await getCartLength();
   const session = await auth();
 
   return (
@@ -32,10 +47,15 @@ const Navbar = async () => {
         <div className="flex gap-4 items-center justify-end h-full w-full">
           {session?.user?.role === "user" ? (
             <Link
-              className={buttonVariants({ variant: "ghost", size: "icon" })}
+              className={
+                (buttonVariants({ variant: "ghost", size: "icon" }), "relative")
+              }
               href="/cart"
             >
               <ShoppingCart />
+              <span className="absolute -top-2 -right-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
+                {totalItems}
+              </span>
             </Link>
           ) : null}
           <DropdownMenu>
@@ -63,18 +83,21 @@ const Navbar = async () => {
                   <DropdownMenuItem asChild>
                     <Link href="/user/settings">Settings</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <form
-                      action={async () => {
-                        "use server";
-                        await signOut();
-                      }}
-                    >
-                      <button className="w-full text-left">Sign Out</button>
-                    </form>
-                  </DropdownMenuItem>
                 </>
+              ) : null}
+              <ModeToggle />
+              <DropdownMenuSeparator />
+              {session ? (
+                <DropdownMenuItem asChild>
+                  <form
+                    action={async () => {
+                      "use server";
+                      await signOut();
+                    }}
+                  >
+                    <button className="w-full text-left">Sign Out</button>
+                  </form>
+                </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem asChild>
                   <form

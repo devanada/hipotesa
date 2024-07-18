@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Carousel,
@@ -26,35 +26,37 @@ export default async function Page() {
 
   return (
     <>
-      <section className="w-full py-12 md:py-24 lg:py-32">
-        <div className="container grid gap-6 px-4 md:px-6 lg:grid-cols-[1fr_550px] lg:gap-12">
-          <div className="flex flex-col justify-center space-y-4">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Discover the Latest Tech at Our Online Store
-              </h1>
-              <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                Browse our wide selection of cutting-edge computers, laptops,
-                and accessories. Find the perfect tech to power your digital
-                life.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Link className={buttonVariants({ size: "lg" })} href="/products">
-                Shop Now
-              </Link>
+      <section className="py-12 md:py-24 lg:py-32">
+        <div className="container grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <Image
+              src="/high-end-pc-2.png"
+              width={600}
+              height={600}
+              alt="Hero Product"
+              className="mx-auto aspect-square rounded-lg object-cover"
+            />
+          </div>
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+              Unleash Your Computing Power
+            </h1>
+            <p className="text-muted-foreground md:text-xl">
+              Discover the latest and greatest computer hardware at Hipotesa
+              Store. Upgrade your setup and experience unparalleled performance.
+            </p>
+            <div className="flex gap-4">
+              <Button size="lg" className="flex-1" asChild>
+                <Link href="/products">Shop Now</Link>
+              </Button>
+              <Button size="lg" variant="outline" className="flex-1">
+                <Link href="#">Learn More</Link>
+              </Button>
             </div>
           </div>
-          <img
-            alt="Hero"
-            className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-            height="550"
-            src="/computer.svg"
-            width="550"
-          />
         </div>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
         <Carousel
           opts={{
             align: "start",
@@ -96,15 +98,15 @@ export default async function Page() {
           <CarouselNext />
         </Carousel>
       </section>
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="w-full py-12">
         <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-10">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
               Find the Perfect Tech for Your Needs
             </h2>
             <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-              Browse our wide selection of computers, laptops, and accessories
-              to find the perfect tech to power your digital life.
+              Discover the latest and greatest computer hardware at Hipotesa
+              Store. Upgrade your setup and experience unparalleled performance.
             </p>
           </div>
           <form className="flex space-x-2" action={handleSearch}>

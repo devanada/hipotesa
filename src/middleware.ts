@@ -9,23 +9,24 @@ export default middleware((req) => {
       : "authjs.session-token";
   const session = !!req.cookies.get(sessionCookie);
 
-  const redirectPatterns = [
-    "/dashboard/categories/:id",
-    "/dashboard/products/:id",
-    "/dashboard/users/:id",
-  ];
+  // const redirectPatterns = [
+  //   "/dashboard/categories/:id",
+  //   "/dashboard/products/:id",
+  //   "/dashboard/users/:id",
+  // ];
 
-  for (const pattern of redirectPatterns) {
-    const escapedPattern = pattern.replace(":id", "[a-zA-Z0-9_]+");
-    const regex = new RegExp(`^${escapedPattern}$`);
+  // for (const pattern of redirectPatterns) {
+  //   const escapedPattern = pattern.replace(":id", "[a-zA-Z0-9_]+");
+  //   const regex = new RegExp(`^${escapedPattern}$`);
 
-    if (pathname.match(regex) && !pathname.endsWith("/create")) {
-      const url = req.nextUrl.clone();
-      url.pathname = pathname.replace(/\/[a-zA-Z0-9_]+$/, "");
+  //   if (pathname.match(regex) && !pathname.endsWith("/create")) {
+  //     console.log(pathname);
+  //     const url = req.nextUrl.clone();
+  //     url.pathname = pathname.replace(/\/[a-zA-Z0-9_]+$/, "");
 
-      return NextResponse.redirect(url, 308);
-    }
-  }
+  //     return NextResponse.redirect(url, 308);
+  //   }
+  // }
 
   if (!session) {
     return NextResponse.redirect(

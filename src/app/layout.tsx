@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 import { cn } from "@/lib/utils";
 
@@ -37,12 +38,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="h-full w-full flex flex-col">
+          <div className="h-full w-full flex flex-col overflow-auto">
             <Navbar />
-            <main className="grow container flex flex-col space-y-4 overflow-auto">
+            <main className="flex-1 container flex flex-col space-y-4">
               {children}
               <Toaster richColors position="top-center" />
             </main>
+            <Footer />
           </div>
         </ThemeProvider>
       </body>

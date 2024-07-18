@@ -5,7 +5,7 @@ import {
   TransactionSchema,
   transactionSchema,
 } from "@/utils/types/transactions";
-import { constructQuery, isNoAuth } from "@/utils/functions";
+import { constructQuery, isNoAuth, transactionsQuery } from "@/utils/functions";
 import { snap } from "@/utils/configs/payment";
 import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
@@ -160,7 +160,7 @@ export const POST = auth(async function POST(request) {
 
 export const GET = auth(async function GET(request) {
   try {
-    let query = constructQuery<Prisma.TransactionFindManyArgs>(request);
+    let query = transactionsQuery(request);
 
     if (isNoAuth(request.auth)) {
       return NextResponse.json(
@@ -172,35 +172,36 @@ export const GET = auth(async function GET(request) {
       );
     }
 
-    const user = request.auth?.user;
-    const data = await prisma.transaction.findMany({
-      ...query,
-      where: {
-        user_id: user?.role === "user" ? user?.id : undefined,
-      },
-      include: {
-        order: {
-          select: {
-            id: true,
-            status: true,
-            total: true,
+    const [data, count] = await prisma.$transaction([
+      prisma.transaction.findMany({
+        ...query,
+        include: {
+          order: {
+            select: {
+              id: true,
+              status: true,
+              total: true,
+            },
           },
         },
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-      cacheStrategy: { ttl: 60 },
-    });
-
-    const totalCount = await prisma.transaction.count();
-    const totalPages = Math.ceil(totalCount / 10);
+        orderBy: {
+          created_at: "desc",
+        },
+        cacheStrategy: { ttl: 60 },
+      }),
+      prisma.transaction.count({
+        where: {
+          user_id: query.where?.user_id,
+        },
+      }),
+    ]);
+    const totalPages = Math.ceil(count / 10);
 
     return NextResponse.json({
       message: "Successfully get transactions",
       metadata: {
-        totalCount,
-        totalPages,
+        total_count: count,
+        total_pages: totalPages,
       },
       data,
     });

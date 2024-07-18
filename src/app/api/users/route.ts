@@ -91,8 +91,8 @@ export const GET = auth(async function GET(request) {
     return NextResponse.json({
       message: "Successfully get users",
       metadata: {
-        totalCount,
-        totalPages,
+        total_count: totalCount,
+        total_pages: totalPages,
       },
       data,
     });

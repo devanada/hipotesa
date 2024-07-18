@@ -5,8 +5,8 @@ export interface IResponseSuccess<TData> {
   message: string;
   data: TData;
   metadata?: {
-    totalCount: number;
-    totalPages: number;
+    total_count: number;
+    total_pages: number;
   };
 }
 

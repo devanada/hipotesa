@@ -21,6 +21,7 @@ enum OrderStatus {
 
 enum Roles {
   admin
+  superadmin
   user
 }
 

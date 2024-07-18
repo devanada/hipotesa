@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,23 @@ import {
 import { ProductExtend } from "@/utils/types/products";
 
 export const columns: ColumnDef<ProductExtend>[] = [
+  {
+    accessorKey: "image",
+    header: "Image",
+    cell: async ({ row }) => {
+      const product = row.original;
+
+      return (
+        <Image
+          className="object-contain"
+          alt={product.name}
+          src={product.image ?? "/placeholder.svg"}
+          width={50}
+          height={50}
+        />
+      );
+    },
+  },
   {
     accessorKey: "name",
     header: "Name",
@@ -55,11 +73,13 @@ export const columns: ColumnDef<ProductExtend>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/products/${product.id}`}>See detail product</Link>
+              <Link href={`/products/${product.id}`}>
+                See live detail product
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/dashboard/products/${product.id}/edit`}>
-                Edit Product
+              <Link href={`/dashboard/products/${product.id}`}>
+                Edit product
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

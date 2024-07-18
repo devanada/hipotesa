@@ -28,7 +28,7 @@ export function ProductCard({
       className={cn("space-y-3 flex flex-col justify-between", className)}
       {...props}
     >
-      <Link className="overflow-hidden" href={href}>
+      <Link className="overflow-hidden m-auto" href={href}>
         <Image
           src={product.image!}
           alt={product.name}

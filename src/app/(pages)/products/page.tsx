@@ -20,7 +20,7 @@ export default async function Page({
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {data.map((product) => (
           <ProductCard
             key={product.id}
@@ -49,18 +49,18 @@ export default async function Page({
             <PaginationNext
               href={`?page=${+pageNumber + 1}`}
               aria-disabled={
-                +pageNumber === metadata?.totalPages ||
-                metadata?.totalPages === 0
+                +pageNumber === metadata?.total_pages ||
+                metadata?.total_pages === 0
               }
               tabIndex={
-                +pageNumber === metadata?.totalPages ||
-                metadata?.totalPages === 0
+                +pageNumber === metadata?.total_pages ||
+                metadata?.total_pages === 0
                   ? -1
                   : undefined
               }
               className={
-                +pageNumber === metadata?.totalPages ||
-                metadata?.totalPages === 0
+                +pageNumber === metadata?.total_pages ||
+                metadata?.total_pages === 0
                   ? "pointer-events-none opacity-50"
                   : undefined
               }

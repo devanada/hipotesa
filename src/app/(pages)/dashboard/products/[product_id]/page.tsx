@@ -31,7 +31,7 @@ export default async function Page({
             <span className="sr-only">Back</span>
           </Link>
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Create a Product
+            Edit Product
           </h1>
           <div className="hidden items-center gap-2 md:ml-auto md:flex">
             <Button variant="outline" size="sm" type="reset" form="create-form">

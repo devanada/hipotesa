@@ -1,4 +1,5 @@
 import { ChevronLeft } from "lucide-react";
+import { Suspense } from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
 
@@ -9,13 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import DataTable from "@/components/data-table";
@@ -51,7 +45,7 @@ export default async function Page({
             <span className="sr-only">Back</span>
           </Link>
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Detail Order
+            Order Detail
           </h1>
         </div>
         <p>
@@ -101,13 +95,25 @@ export default async function Page({
         </Card>
       </div>
       <div className="grid items-start gap-4 lg:gap-8">
-        <DataTable
-          columns={columns}
-          data={data.order.items}
-          title="Products"
-          description="List of product that user bought"
-          showButton={false}
-        />
+        <Suspense
+          fallback={
+            <DataTable
+              columns={columns}
+              data={[]}
+              title="Products"
+              description="List of product that user bought"
+              showButton={false}
+            />
+          }
+        >
+          <DataTable
+            columns={columns}
+            data={data.order.items}
+            title="Products"
+            description="List of product that user bought"
+            showButton={false}
+          />
+        </Suspense>
       </div>
       <div className="grid items-start gap-4 lg:gap-8">
         <Card>

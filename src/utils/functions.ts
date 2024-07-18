@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
 
 import { cloudinaryConfig } from "@/utils/configs/storage";
@@ -86,11 +87,11 @@ export const constructQuery = <T>(request: NextRequest) => {
   const search = searchParams.get("search");
 
   let query = {
-    take: 10,
+    take: 12,
   } as T;
 
   if (page) {
-    const skip = (+page - 1) * 10;
+    const skip = (+page - 1) * 12;
 
     query = {
       ...query,
@@ -117,6 +118,36 @@ export const constructQuery = <T>(request: NextRequest) => {
           contains: search,
           mode: "insensitive",
         },
+      },
+    };
+  }
+
+  return query;
+};
+
+export const transactionsQuery = (request: NextRequest) => {
+  const searchParams = request.nextUrl.searchParams;
+  const page = searchParams.get("page");
+  const user_id = searchParams.get("user_id");
+
+  let query = {
+    take: 12,
+  } as Prisma.TransactionFindManyArgs;
+
+  if (page) {
+    const skip = (+page - 1) * 12;
+
+    query = {
+      ...query,
+      skip,
+    };
+  }
+
+  if (user_id) {
+    query = {
+      ...query,
+      where: {
+        user_id,
       },
     };
   }

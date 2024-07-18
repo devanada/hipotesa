@@ -3,7 +3,6 @@ import Link from "next/link";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { ModeToggle } from "./mode-toggle";
 
 import { auth } from "@/auth";
 
@@ -14,7 +13,10 @@ export default async function Page() {
     <div className="flex flex-col items-center justify-center gap-6 px-4 py-8 md:px-6 lg:flex-row lg:items-start lg:gap-12">
       <div className="flex flex-col items-center gap-4">
         <Avatar className="h-24 w-24">
-          <AvatarImage alt="User Avatar" src={session?.user?.image!} />
+          <AvatarImage
+            alt="User Avatar"
+            src={session?.user?.image ?? undefined}
+          />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div className="text-center lg:text-left">
@@ -40,7 +42,7 @@ export default async function Page() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-500 dark:text-gray-400">Address</span>
-              <span>{session?.user?.address}</span>
+              <span>{session?.user?.address ?? "-"}</span>
             </div>
           </CardContent>
         </Card>
@@ -59,8 +61,13 @@ export default async function Page() {
               </Link>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Theme</span>
-              <ModeToggle />
+              <span className="text-gray-500 dark:text-gray-400">Password</span>
+              <Link
+                className={buttonVariants({ size: "sm", variant: "outline" })}
+                href="/user/settings"
+              >
+                Change Password
+              </Link>
             </div>
           </CardContent>
         </Card>

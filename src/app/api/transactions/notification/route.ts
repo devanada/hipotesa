@@ -4,7 +4,7 @@ import { Notification } from "@/utils/types/transactions";
 import { prisma } from "@/utils/configs/db";
 import { auth } from "@/auth";
 
-export const POST = auth(async function GET(request) {
+export const POST = auth(async function POST(request) {
   const { order_id, transaction_status, fraud_status, ...data } =
     (await request.json()) as Notification;
 

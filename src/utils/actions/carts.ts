@@ -19,6 +19,7 @@ export async function handleAddItem(formData: FormData) {
     };
 
     await addItemToCart(payload);
+    // TODO: return message toast
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -29,7 +30,6 @@ export async function handleAddItem(formData: FormData) {
   }
 
   revalidateTag("cart");
-  redirect("/cart");
 }
 
 export async function handleEditItem(itemId: string, data: CartSchema) {
