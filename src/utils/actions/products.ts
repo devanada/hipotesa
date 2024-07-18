@@ -3,17 +3,15 @@
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { IResponseSuccess, IResponseFailed } from "@/utils/types/api";
-import { ProductExtend } from "@/utils/types/products";
-import { FormState } from "@/utils/hooks/use-form-action";
-import Fetch from "@/utils/apis/fetch";
+import { addProduct, editProduct, removeProduct } from "../apis/products";
+import { IResponseFailed } from "@/utils/types/api";
 
-export async function createProduct(
-  prevState: FormState,
+export async function handleAddProduct(
+  prevState: IResponseFailed,
   formData: FormData
-): Promise<IResponseFailed> {
+) {
   try {
-    await Fetch.create<ProductExtend>("/api/products", formData);
+    await addProduct(formData);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -27,13 +25,13 @@ export async function createProduct(
   redirect("/dashboard/products");
 }
 
-export async function editProduct(
-  categoryId: number,
-  prevState: FormState,
+export async function handleEditProduct(
+  productId: string,
+  prevState: IResponseFailed,
   formData: FormData
-): Promise<IResponseFailed> {
+) {
   try {
-    await Fetch.update<ProductExtend>(`/api/products/${categoryId}`, formData);
+    await editProduct(productId, formData);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 
@@ -45,4 +43,20 @@ export async function editProduct(
 
   revalidateTag("products");
   redirect("/dashboard/products");
+}
+
+export async function handleRemoveProduct(productId: string) {
+  try {
+    await removeProduct(productId);
+  } catch (error) {
+    const { message, reason } = error as IResponseFailed;
+
+    return {
+      message: message,
+      reason: reason,
+    };
+  }
+
+  revalidateTag("categories");
+  redirect("/dashboard/categories");
 }

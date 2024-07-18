@@ -5,16 +5,9 @@ import { Category } from "@prisma/client";
 import { Upload } from "lucide-react";
 import Image from "next/image";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -22,10 +15,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import { useFormAction } from "@/utils/hooks/use-form-action";
 import { ProductExtend } from "@/utils/types/products";
-import { createProduct } from "@/utils/actions/products";
+import { handleEditProduct } from "@/utils/actions/products";
 
 interface Props {
   data: ProductExtend;
@@ -33,7 +33,8 @@ interface Props {
 }
 
 export default function Form(props: Props) {
-  const [errorMsg, formAction] = useFormAction(createProduct);
+  const formActionWithId = handleEditProduct.bind(null, String(props.data.id));
+  const [errorMsg, formAction] = useFormAction(formActionWithId);
   const [imageSrc, setImageSrc] = useState(
     props.data.image ?? "/placeholder.svg"
   );

@@ -2,16 +2,15 @@
 
 import { redirect } from "next/navigation";
 
-import { FormState } from "@/utils/hooks/use-form-action";
 import { IResponseFailed } from "@/utils/types/api";
-import Fetch from "@/utils/apis/fetch";
+import { editProfile } from "../apis/users";
 
-export async function editProfile(
-  prevState: FormState,
+export async function handleEditProfile(
+  prevState: IResponseFailed,
   formData: FormData
-): Promise<IResponseFailed> {
+) {
   try {
-    await Fetch.update(`/api/users`, formData);
+    await editProfile(formData);
   } catch (error) {
     const { message, reason } = error as IResponseFailed;
 

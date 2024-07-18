@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { IResponseFailed } from "@/utils/types/api";
 import { CartSchema } from "../types/carts";
@@ -9,7 +10,6 @@ import {
   editItemOnCart,
   removeItemFromCart,
 } from "../apis/carts";
-import { redirect } from "next/navigation";
 
 export async function handleAddItem(formData: FormData) {
   try {
